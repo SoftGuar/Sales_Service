@@ -1,9 +1,5 @@
 import { orderService } from "../services/orderService";
 import { FastifyRequest, FastifyReply } from "fastify";
-// TODO: move this to an orderService
-// before updating dispositive we first create quotation and once confirmed we create transaction
-// then we create product transaction to link the dispositive to the transaction
-// then we update the dispositive to assign it to the user
 export interface OrderRequest {
     Body:{
         userId:number;
@@ -11,6 +7,19 @@ export interface OrderRequest {
         commercial_id:number;
     }
 }
+/**
+ * Handles the creation of an order.
+ *
+ * @param request - The Fastify request object containing the order details.
+ * @param request.body.product_id - The ID of the product to be ordered.
+ * @param request.body.userId - The ID of the user placing the order.
+ * @param request.body.commercial_id - The ID of the commercial entity associated with the order.
+ * @param reply - The Fastify reply object used to send the response.
+ *
+ * @returns A response indicating the success or failure of the order creation process.
+ *
+ * @throws Will send a 500 status code if an error occurs during the order creation process.
+ */
 export const orderHandler= async (
     request: FastifyRequest<OrderRequest>,reply: FastifyReply,) => {
     const productId = Number(request.body.product_id)

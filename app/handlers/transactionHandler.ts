@@ -1,17 +1,36 @@
 import { TransactionService } from "../services/transactionService";
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { CreateTransactionInput,UpdateTransactionInput ,ProductTransactionInput} from "../models/transactionModel";
+import { CreateTransactionInput, UpdateTransactionInput, ProductTransactionInput } from "../models/transactionModel";
 
-interface CreateTransactionRequest{
+/**
+ * Interface defining the structure of a request to create a transaction.
+ */
+export interface CreateTransactionRequest {
     Body: CreateTransactionInput;
 }
-interface UpdateTransactionRequest{
+
+/**
+ * Interface defining the structure of a request to update a transaction.
+ */
+export interface UpdateTransactionRequest {
     Params: { id: number };
     Body: UpdateTransactionInput;
 }
-interface ProductTransactionRequest{
-   Body: ProductTransactionInput;
+
+/**
+ * Interface defining the structure of a request to create a product transaction.
+ */
+export interface ProductTransactionRequest {
+    Body: ProductTransactionInput;
 }
+
+/**
+ * Handles the creation of a new transaction.
+ * 
+ * @param request - The Fastify request object containing the transaction data.
+ * @param reply - The Fastify reply object used to send the response.
+ * @returns A response with the newly created transaction or an error message.
+ */
 export const createTransaction = async (
     request: FastifyRequest<CreateTransactionRequest>,
     reply: FastifyReply,
@@ -29,6 +48,14 @@ export const createTransaction = async (
         reply.code(500).send({ message: 'An error occurred while creating transaction' });
     }
 }
+
+/**
+ * Handles the retrieval of all transactions.
+ * 
+ * @param request - The Fastify request object.
+ * @param reply - The Fastify reply object used to send the response.
+ * @returns A response with the list of transactions or an error message.
+ */
 export const getTransactions = async (
     request: FastifyRequest,
     reply: FastifyReply,
@@ -44,6 +71,14 @@ export const getTransactions = async (
         reply.code(500).send({ message: 'An error occurred while getting transactions' });
     }
 }
+
+/**
+ * Handles the retrieval of a specific transaction by its ID.
+ * 
+ * @param request - The Fastify request object containing the transaction ID.
+ * @param reply - The Fastify reply object used to send the response.
+ * @returns A response with the requested transaction or an error message.
+ */
 export const getTransactionById = async (
     request: FastifyRequest<{ Params: { id: number } }>,
     reply: FastifyReply,
@@ -60,6 +95,14 @@ export const getTransactionById = async (
         reply.code(500).send({ message: 'An error occurred while getting transaction' });
     }
 }
+
+/**
+ * Handles the update of an existing transaction.
+ * 
+ * @param request - The Fastify request object containing the transaction ID and updated data.
+ * @param reply - The Fastify reply object used to send the response.
+ * @returns A response with the updated transaction or an error message.
+ */
 export const updateTransaction = async (
     request: FastifyRequest<UpdateTransactionRequest>,
     reply: FastifyReply,
@@ -78,6 +121,14 @@ export const updateTransaction = async (
         reply.code(500).send({ message: 'An error occurred while updating transaction' });
     }
 }
+
+/**
+ * Handles the deletion of a transaction by its ID.
+ * 
+ * @param request - The Fastify request object containing the transaction ID.
+ * @param reply - The Fastify reply object used to send the response.
+ * @returns A response confirming the deletion or an error message.
+ */
 export const deleteTransaction = async (
     request: FastifyRequest<{ Params: { id: number } }>,
     reply: FastifyReply,
@@ -94,10 +145,18 @@ export const deleteTransaction = async (
         reply.code(500).send({ message: 'An error occurred while deleting transaction' });
     }
 }
+
+/**
+ * Handles the creation of a product transaction.
+ * 
+ * @param request - The Fastify request object containing the product transaction data.
+ * @param reply - The Fastify reply object used to send the response.
+ * @returns A response with the newly created product transaction or an error message.
+ */
 export const createProductTransaction = async (
-    request: FastifyRequest<ProductTransactionRequest>,reply: FastifyReply,) => {
+    request: FastifyRequest<ProductTransactionRequest>, reply: FastifyReply,) => {
     const data = request.body;
-    try {     
+    try {
         const productTransaction = await TransactionService.createProductTransaction(data);
         if (productTransaction) {
             reply.send(productTransaction);

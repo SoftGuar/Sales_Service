@@ -12,6 +12,7 @@ export const UserService = {
   createUserandHelper: async (data: CreateUserInput): Promise<object | null> => {
     try {
       // TODO: Call the account management service to create accounts for both user and helper
+      
       return null;
     } catch (e) {
       console.error('Error creating user:', e);
