@@ -6,6 +6,14 @@ dotenv.config();
 const prisma = new PrismaClient();
 
 // Check database connection
+/**
+ * Establishes a connection to the database and logs the status.
+ * If the connection fails, logs the error and terminates the process.
+ *
+ * @async
+ * @function
+ * @throws Will terminate the process with exit code 1 if the database connection fails.
+ */
 export async function checkDatabaseConnection() {
   try {
     await prisma.$connect();

@@ -1,8 +1,5 @@
 import dispositiveService from "./dispositiveService";
 import { TransactionService } from "./transactionService";
-import { QuotationService } from "./quotationService";
-import { productService } from "./productService";
-
 export interface OrderInput {
   product_id: number;
   user_id: number;
