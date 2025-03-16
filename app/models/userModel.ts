@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import prisma from "../services/prismaService";
 
 export interface CreateUserInput {
@@ -15,7 +16,7 @@ export const UserModel = {
    * @returns {Promise<Object|null>} The user object, or null if not found or an error occurs.
    * @throws {Error} If the user is not found.
    */
-  findById: async (id: number): Promise<object | null> => {
+  findById: async (id: number): Promise<User | null> => {
     try {
       const result = await prisma.user.findUnique({
         where: { id },

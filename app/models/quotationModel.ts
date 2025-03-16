@@ -1,3 +1,4 @@
+import { Quotation } from '@prisma/client';
 import prisma from '../services/prismaService';
 
 export interface CreateQuotationInput {
@@ -16,7 +17,7 @@ export const QuotationModel = {
      * @param {CreateQuotationInput} quotationData - The data for the new quotation.
      * @returns {Promise<Object|null>} The created quotation object, or null if an error occurs.
      */
-    create: async (quotationData: CreateQuotationInput): Promise<object | null> => {
+    create: async (quotationData: CreateQuotationInput): Promise<Quotation | null> => {
         try {
             const result = await prisma.quotation.create({
                 data: quotationData,

@@ -1,4 +1,5 @@
 // app/services/userService.ts
+import { User } from '@prisma/client';
 import { UserModel, CreateUserInput } from '../models/userModel';
 import bcrypt from 'bcrypt';
 
@@ -21,16 +22,16 @@ export const UserService = {
   /**
    * Retrieves a user by their ID.
    * @param {number} id - The ID of the user to retrieve.
-   * @returns {Promise<Object|null>} The user object, or null if not found or an error occurs.
+   * @returns {Promise<User|null>} The user object, or null if not found and console error.
    * @throws {Error} If the user is not found.
    */
-  getUserById: async (id: number): Promise<object | null> => {
+  getUserById: async (id: number): Promise<User | null> => {
     try {
       const result = await UserModel.findById(id);
       if (result) {
         return result;
       } else {
-        throw new Error('User not found');
+        return null;
       }
     } catch (e) {
       console.error('Error getting user by ID:', e);
