@@ -1,0 +1,11 @@
+services:
+  softguar-sales-service:
+    build: .
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
