@@ -3,7 +3,8 @@ import Fastify from 'fastify';
 import { checkDatabaseConnection, disconnectPrisma } from './services/prismaService';
 import registerMiddlewares from './middlewares/index';
 import registerRoutes  from './routers/index';
-import { connect } from 'rabbitmq-stream-js-client';
+import swagger from '@fastify/swagger';
+import swaggerUi from '@fastify/swagger-ui';
 var amqp = require('amqplib/callback_api');
 
 // Load environment variables
@@ -25,6 +26,18 @@ async function startServer() {
    registerMiddlewares(fastify);
    // 2. Register routes
    registerRoutes(fastify);
+   fastify.register(swagger, {
+    swagger: {
+      info: {
+        title: 'API Docs',
+        description: 'API Documentation for the Fastify project',
+        version: '1.0.0',
+      },
+    },
+  });
+  
+  fastify.register(swaggerUi);
+  
   // Start server
   try {
     const port = Number(process.env.PORT) || 3000;

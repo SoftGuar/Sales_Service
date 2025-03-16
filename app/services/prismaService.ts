@@ -5,7 +5,6 @@ dotenv.config();
 
 const prisma = new PrismaClient();
 
-// Check database connection
 /**
  * Establishes a connection to the database and logs the status.
  * If the connection fails, logs the error and terminates the process.
