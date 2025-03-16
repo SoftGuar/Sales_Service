@@ -21,10 +21,12 @@ export const productModel = {
   async getAllProducts(): Promise<Array<any>> {
     try {
       const result = await prisma.product.findMany();
-      if (result == null) {
+      if (result) {
+        return result
+      }
+      else {
         return [];
       }
-      return result;
     } catch (error) {
       console.error('Failed to get products:', error);
       return [];
