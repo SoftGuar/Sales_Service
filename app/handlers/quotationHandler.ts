@@ -82,7 +82,7 @@ export const getQuotationById = async (
   reply: FastifyReply
 ) => {
   try {
-    const quotationId = request.params.id;
+    const quotationId =Number(request.params.id);
     const quotation = await QuotationService.getQuotationById(quotationId);
     if (quotation) {
       reply.send(quotation);
@@ -105,7 +105,7 @@ export const updateQuotation = async (
   reply: FastifyReply
 ) => {
   try {
-    const quotationId = request.params.id;
+    const quotationId = Number(request.params.id);
     const quotation = request.body;
     const updatedQuotation = await QuotationService.updateQuotation(Number(quotationId), quotation);
     if (updatedQuotation) {
@@ -129,7 +129,7 @@ export const deleteQuotation = async (
   reply: FastifyReply
 ) => {
   try {
-    const quotationId = request.params.id;
+    const quotationId = Number(request.params.id);
     const deletedQuotation = await QuotationService.deleteQuotation(quotationId);
     if (deletedQuotation) {
       reply.send(deletedQuotation);
@@ -152,7 +152,7 @@ export const associateProduct = async (
   reply: FastifyReply
 ) => {
   try {
-    const quotationId = request.params.id;
+    const quotationId = Number(request.params.id);
     const productId = request.body.product_id;
     const count = request.body.count;
     const associatedProduct = await QuotationService.associateProduct(quotationId, productId, count);
@@ -173,12 +173,12 @@ export const associateProduct = async (
  * @returns {Promise<void>} Sends the list of quotations or an error message if no quotations are found.
  */
 export const getQuotationByUserId = async (
-  request: FastifyRequest<{ Params: { id: number } }>,
+  request: FastifyRequest<{ Params: { user_id: number } }>,
   reply: FastifyReply
 ) => {
   try {
-    const userId = request.params.id;
-    const quotations = await QuotationService.findByUserId(userId);
+    const user_id = Number(request.params.user_id);
+    const quotations = await QuotationService.findByUserId(user_id);
     if (quotations) {
       reply.send(quotations);
     } else {

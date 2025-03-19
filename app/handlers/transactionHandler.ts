@@ -84,7 +84,7 @@ export const getTransactionById = async (
     reply: FastifyReply,
 ) => {
     try {
-        const transactionId = request.params.id;
+        const transactionId = Number(request.params.id);
         const transaction = await TransactionService.getTransactionById(transactionId);
         if (transaction) {
             reply.send(transaction);
@@ -108,7 +108,7 @@ export const updateTransaction = async (
     reply: FastifyReply,
 ) => {
     try {
-        const transactionId = request.params.id;
+        const transactionId = Number(request.params.id);
         const transaction = request.body;
         reply.log.info('Updating transaction:', transaction);
         const updatedTransaction = await TransactionService.updateTransaction(transactionId, transaction);
@@ -134,7 +134,7 @@ export const deleteTransaction = async (
     reply: FastifyReply,
 ) => {
     try {
-        const transactionId = request.params.id;
+        const transactionId = Number(request.params.id);
         const deletedTransaction = await TransactionService.deleteTransaction(transactionId);
         if (deletedTransaction) {
             reply.send(deletedTransaction);

@@ -40,7 +40,7 @@ beforeEach(() => {
 
 describe("createTransaction", () => {
     it("should create a transaction and return it", async () => {
-        const mockTransaction = { userId: 1, amount: 500 };
+        const mockTransaction = { user_id: 1, commercial_id: 2, date: new Date() };
         const mockCreatedTransaction = { id: 1, ...mockTransaction };
         (TransactionService.createTransaction as jest.Mock).mockResolvedValue(mockCreatedTransaction);
 
@@ -56,7 +56,7 @@ describe("createTransaction", () => {
     });
 
     it("should return a 500 error if transaction creation fails", async () => {
-        const mockTransaction = { userId: 1, amount: 500 };
+        const mockTransaction = { user_id: 1, commercial_id: 2, date: new Date() };
         (TransactionService.createTransaction as jest.Mock).mockResolvedValue(null);
 
         const mockRequest = {
@@ -73,7 +73,7 @@ describe("createTransaction", () => {
 
 describe("getTransactions", () => {
     it("should return all transactions", async () => {
-        const mockTransactions = [{ id: 1, amount: 500 }, { id: 2, amount: 1000 }];
+        const mockTransactions = [{ user_id: 1, commercial_id: 2, date: new Date() }, { user_id: 2, commercial_id: 2, date: new Date() }];
         (TransactionService.getTransactions as jest.Mock).mockResolvedValue(mockTransactions);
 
         const mockRequest = {} as FastifyRequest;
@@ -99,7 +99,7 @@ describe("getTransactions", () => {
 
 describe("getTransactionById", () => {
     it("should return the transaction if found", async () => {
-        const mockTransaction = { id: 1, amount: 500 };
+        const mockTransaction = { user_id: 1, commercial_id: 2, date: new Date() };
         (TransactionService.getTransactionById as jest.Mock).mockResolvedValue(mockTransaction);
 
         const mockRequest = { params: { id: 1 } } as FastifyRequest<{ Params: { id: number } }>;
@@ -125,7 +125,7 @@ describe("getTransactionById", () => {
 
 describe("updateTransaction", () => {
     it("should update the transaction and return it", async () => {
-        const mockTransaction = { amount: 700 };
+        const mockTransaction = { date: new Date() };
         const mockUpdatedTransaction = { id: 1, ...mockTransaction };
         (TransactionService.updateTransaction as jest.Mock).mockResolvedValue(mockUpdatedTransaction);
 
@@ -141,7 +141,7 @@ describe("updateTransaction", () => {
     });
 
     it("should return a 500 error if transaction update fails", async () => {
-        const mockTransaction = { amount: 700 };
+        const mockTransaction = {date: new Date() };
         (TransactionService.updateTransaction as jest.Mock).mockResolvedValue(null);
 
         const mockRequest = {
@@ -159,7 +159,7 @@ describe("updateTransaction", () => {
 
 describe("deleteTransaction", () => {
     it("should delete the transaction and return it", async () => {
-        const mockDeletedTransaction = { id: 1, amount: 500 };
+        const mockDeletedTransaction ={ user_id: 1, commercial_id: 2, date: new Date() };
         (TransactionService.deleteTransaction as jest.Mock).mockResolvedValue(mockDeletedTransaction);
 
         const mockRequest = { params: { id: 1 } } as FastifyRequest<{ Params: { id: number } }>;

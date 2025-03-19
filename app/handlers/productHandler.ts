@@ -65,7 +65,7 @@ export const getProductById = async (
   request: FastifyRequest<{ Params: { id: number } }>,
   reply: FastifyReply
 ) => {
-  const productId = request.params.id;
+  const productId = Number(request.params.id);
   const product = await productService.getProductById(productId);
   if (product) {
     reply.send(product);
@@ -84,7 +84,7 @@ export const updateProduct = async (
   request: FastifyRequest<UpdateProductRequest>,
   reply: FastifyReply
 ) => {
-  const productId = request.params.id;
+  const productId =Number(request.params.id);
   const product = request.body;
   const updatedProduct = await productService.updateProduct(productId, product);
   if (updatedProduct) {
@@ -104,7 +104,7 @@ export const deleteProduct = async (
   request: FastifyRequest<{ Params: { id: number } }>,
   reply: FastifyReply
 ) => {
-  const productId = request.params.id;
+  const productId = Number(request.params.id);
   const deletedProduct = await productService.deleteProduct(productId);
   if (deletedProduct) {
     reply.send(deletedProduct);

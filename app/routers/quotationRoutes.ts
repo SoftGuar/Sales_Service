@@ -24,7 +24,7 @@ async function quotationRoutes(fastify: FastifyInstance) {
   fastify.get('/:id', qh.getQuotationById)
   fastify.delete('/:id', qh.deleteQuotation)
   fastify.post('/associate/:id', qh.associateProduct)
-  fastify.get('/user/:userId', qh.getQuotationByUserId)
+  fastify.get('/user/:user_id', qh.getQuotationByUserId)
 }
 
 export default quotationRoutes;

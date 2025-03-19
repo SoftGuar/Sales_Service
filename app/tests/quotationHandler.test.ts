@@ -219,7 +219,7 @@ describe("getQuotationByUserId", () => {
         const mockQuotations = [{ id: 1, total: 1000 }, { id: 2, total: 2000 }];
         (QuotationService.findByUserId as jest.Mock).mockResolvedValue(mockQuotations);
 
-        const mockRequest = { params: { id: 1 } } as FastifyRequest<{ Params: { id: number } }>;
+        const mockRequest = { params: { user_id: 1 } } as FastifyRequest<{ Params: { user_id: number } }>;
 
         await getQuotationByUserId(mockRequest, mockReply as FastifyReply);
 
@@ -230,7 +230,7 @@ describe("getQuotationByUserId", () => {
     it("should return a 404 error if no quotations are found for the user", async () => {
         (QuotationService.findByUserId as jest.Mock).mockResolvedValue(null);
 
-        const mockRequest = { params: { id: 1 } } as FastifyRequest<{ Params: { id: number } }>;
+        const mockRequest = { params: { user_id: 1 } } as FastifyRequest<{ Params: { user_id: number } }>;
 
         await getQuotationByUserId(mockRequest, mockReply as FastifyReply);
 

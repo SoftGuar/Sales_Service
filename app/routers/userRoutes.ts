@@ -20,6 +20,8 @@ import * as um from '../handlers/userHandler';
  */
 async function userRoutes(fastify: FastifyInstance) {
   fastify.post('/', um.createUser)
+  fastify.get('/', um.getUsers)
+  fastify.get('/:id', um.getUserById)
 }
 
 export default userRoutes;

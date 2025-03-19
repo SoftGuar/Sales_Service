@@ -99,9 +99,9 @@ export const QuotationService = {
    * @returns {Promise<Array<Object>>} A promise that resolves to an array of quotation objects.
    * @throws {Error} If the database query fails.
    */
-  findByUserId: async (userId: number) => {
+  findByUserId: async (user_id: number) => {
     try {
-      return await quotationModel.QuotationModel.findByUserId(userId);
+      return await quotationModel.QuotationModel.findByUserId(user_id);
     } catch (error) {
       console.error('Error finding quotations by user ID:', error);
       throw new Error('Failed to find quotations by user ID');

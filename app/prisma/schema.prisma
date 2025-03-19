@@ -15,6 +15,7 @@ model Admin {
   password   String
   phone      String?
   add_by     Int
+  privilege  Int
   SuperAdmin SuperAdmin @relation(fields: [add_by], references: [id], onDelete: Cascade)
 }
 
