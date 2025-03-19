@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { UserService } from '../services/usersService';
-import { CreateUserInput } from '../models/userModel';
+import { CreateHelperInput, CreateUserInput } from '../models/userModel';
 import exp from 'constants';
 
 /**
@@ -14,12 +14,13 @@ import exp from 'constants';
  * @throws Will return an error message if the user creation fails.
  */
 export const createUser = async (
-  request: FastifyRequest<{ Body: CreateUserInput }>,
+  request: FastifyRequest<{ Body: { userData: CreateUserInput, helperData: CreateHelperInput } }>,
   reply: FastifyReply
 ) => {
   try {
-    const userData = request.body;
-    const newUser = await UserService.createUserandHelper(userData);
+    const userData = request.body.userData;
+    const helperData = request.body.helperData;
+    const newUser = await UserService.createUserandHelper(userData,helperData);
     if(!newUser){
       return reply.code(500).send({
         success: false,

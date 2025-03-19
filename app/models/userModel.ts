@@ -9,6 +9,14 @@ export interface CreateUserInput {
   phone?: string;
   role: string;
 }
+export interface CreateHelperInput
+{
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  phone?: string;
+}
 export const UserModel = {
   /**
    * Finds a user by their ID.

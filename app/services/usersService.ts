@@ -1,6 +1,6 @@
 // app/services/userService.ts
 import { User } from '@prisma/client';
-import { UserModel, CreateUserInput } from '../models/userModel';
+import { UserModel, CreateUserInput,CreateHelperInput } from '../models/userModel';
 import bcrypt from 'bcrypt';
 
 export const UserService = {
@@ -9,11 +9,40 @@ export const UserService = {
    * @param {CreateUserInput} data - The data for creating the user and helper.
    * @returns {Promise<Object|null>} The created user and helper objects, or null if an error occurs.
    */
-  createUserandHelper: async (data: CreateUserInput): Promise<object | null> => {
+  createUserandHelper: async (dataUser: CreateUserInput,dataHelper:CreateHelperInput): Promise<object | null> => {
     try {
       // TODO: Call the account management service to create accounts for both user and helper
+      const user = await fetch(
+        !process.env.API_GATEWAY
+          ? 'http://localhost:3000/admin/account/user'
+          : `${process.env.API_GATEWAY}/admin/account/user`,
+        {
+          method: 'POST',
+          headers: {  
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataUser),
+        }
+      ).then((res) => 
+      {if (res.status != 200) {
+        throw new Error("Failed to create user");}});
+        const helper = await fetch( 
+          !process.env.API_GATEWAY
+            ? 'http://localhost:3000/admin/account/helper'
+            : `${process.env.API_GATEWAY}/admin/account/helper`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataHelper),
+          }
+        ).then((res) =>
+        {if (res.status != 200) {
+          throw new Error("Failed to create helper");}}
+        );
+        return { user, helper };
       
-      return null;
     } catch (e) {
       console.error('Error creating user:', e);
       return null;

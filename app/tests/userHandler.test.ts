@@ -1,7 +1,7 @@
 import { createUser } from "../handlers/userHandler";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { UserService } from "../services/usersService";
-import { CreateUserInput } from "../models/userModel";
+import { CreateUserInput, CreateHelperInput } from "../models/userModel";
 
 // Mock the UserService module
 jest.mock("../services/usersService");
@@ -29,7 +29,7 @@ describe("userHandler", () => {
     });
 
     describe("createUser", () => {
-        it("should create a user and return it", async () => {
+        it("should create a user and helper and return them", async () => {
             const mockUserData: CreateUserInput = {
                 first_name: "John",
                 last_name: "Doe",
@@ -38,24 +38,34 @@ describe("userHandler", () => {
                 role: "user",
                 phone: "1234567890",
             };
-            const mockCreatedUser = { id: 1, ...mockUserData };
-            (UserService.createUserandHelper as jest.Mock).mockResolvedValue(mockCreatedUser);
+            const mockHelperData: CreateHelperInput = {
+                first_name: "Jane",
+                last_name: "Smith",
+                email: "jane@example.com",
+                password: "securepassword",
+                phone: "0987654321",
+            };
+            const mockCreatedData = {
+                user: { id: 1, ...mockUserData },
+                helper: { id: 2, ...mockHelperData },
+            };
+            (UserService.createUserandHelper as jest.Mock).mockResolvedValue(mockCreatedData);
 
             const mockRequest = {
-                body: mockUserData,
-            } as unknown as FastifyRequest<{ Body: CreateUserInput }>;
+                body: { userData: mockUserData, helperData: mockHelperData },
+            } as unknown as FastifyRequest<{ Body: { userData: CreateUserInput; helperData: CreateHelperInput } }>;
 
             await createUser(mockRequest, mockReply as FastifyReply);
 
-            expect(UserService.createUserandHelper).toHaveBeenCalledWith(mockUserData);
+            expect(UserService.createUserandHelper).toHaveBeenCalledWith(mockUserData, mockHelperData);
             expect(mockReply.code).toHaveBeenCalledWith(201);
             expect(mockReply.send).toHaveBeenCalledWith({
                 success: true,
-                data: mockCreatedUser,
+                data: mockCreatedData,
             });
         });
 
-        it("should return a 400 error if user creation fails", async () => {
+        it("should return a 400 error if user and helper creation fails", async () => {
             const mockUserData: CreateUserInput = {
                 first_name: "John",
                 last_name: "Doe",
@@ -63,16 +73,23 @@ describe("userHandler", () => {
                 password: "securepassword",
                 role: "user",
                 phone: "1234567890",
+            };
+            const mockHelperData: CreateHelperInput = {
+                first_name: "Jane",
+                last_name: "Smith",
+                email: "jane@example.com",
+                password: "securepassword",
+                phone: "0987654321",
             };
             (UserService.createUserandHelper as jest.Mock).mockRejectedValue(new Error("User creation failed"));
 
             const mockRequest = {
-                body: mockUserData,
-            } as unknown as FastifyRequest<{ Body: CreateUserInput }>;
+                body: { userData: mockUserData, helperData: mockHelperData },
+            } as unknown as FastifyRequest<{ Body: { userData: CreateUserInput; helperData: CreateHelperInput } }>;
 
             await createUser(mockRequest, mockReply as FastifyReply);
 
-            expect(UserService.createUserandHelper).toHaveBeenCalledWith(mockUserData);
+            expect(UserService.createUserandHelper).toHaveBeenCalledWith(mockUserData, mockHelperData);
             expect(mockReply.code).toHaveBeenCalledWith(400);
             expect(mockReply.send).toHaveBeenCalledWith({
                 success: false,
@@ -89,15 +106,22 @@ describe("userHandler", () => {
                 role: "user",
                 phone: "1234567890",
             };
+            const mockHelperData: CreateHelperInput = {
+                first_name: "Jane",
+                last_name: "Smith",
+                email: "jane@example.com",
+                password: "securepassword",
+                phone: "0987654321",
+            };
             (UserService.createUserandHelper as jest.Mock).mockRejectedValue("Unexpected error");
 
             const mockRequest = {
-                body: mockUserData,
-            } as unknown as FastifyRequest<{ Body: CreateUserInput }>;
+                body: { userData: mockUserData, helperData: mockHelperData },
+            } as unknown as FastifyRequest<{ Body: { userData: CreateUserInput; helperData: CreateHelperInput } }>;
 
             await createUser(mockRequest, mockReply as FastifyReply);
 
-            expect(UserService.createUserandHelper).toHaveBeenCalledWith(mockUserData);
+            expect(UserService.createUserandHelper).toHaveBeenCalledWith(mockUserData, mockHelperData);
             expect(mockReply.code).toHaveBeenCalledWith(400);
             expect(mockReply.send).toHaveBeenCalledWith({
                 success: false,

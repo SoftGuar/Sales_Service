@@ -1,4 +1,4 @@
-import { productModel, CreateProduct, UpdateProductInput } from "../models/productModel";
+import { productModel} from "../models/productModel";
 
 export const productService = {
   /**
@@ -20,39 +20,5 @@ export const productService = {
   async getProductById(id: number) {
     const product = await productModel.getProductById(id);
     return product;
-  },
-
-  /**
-   * Creates a new product in the database.
-   * @param {CreateProduct} product - The product data to create.
-   * @returns {Promise<Product|null>} A promise that resolves to the created product object, or null if creation fails.
-   * @throws {Error} If the database query fails.
-   */
-  async createProduct(product: CreateProduct) {
-    const result = await productModel.createProduct(product);
-    return result;
-  },
-
-  /**
-   * Updates an existing product in the database.
-   * @param {number} id - The ID of the product to update.
-   * @param {UpdateProductInput} product - The updated product data.
-   * @returns {Promise<Product|null>} A promise that resolves to the updated product object, or null if the update fails.
-   * @throws {Error} If the database query fails.
-   */
-  async updateProduct(id: number, product: UpdateProductInput) {
-    const updatedProduct = await productModel.updateProduct(id, product);
-    return updatedProduct;
-  },
-
-  /**
-   * Deletes a product from the database.
-   * @param {number} id - The ID of the product to delete.
-   * @returns {Promise<Product|null>} A promise that resolves to the deleted product object, or null if deletion fails.
-   * @throws {Error} If the database query fails.
-   */
-  async deleteProduct(id: number) {
-    const deletedProduct = await productModel.deleteProduct(id);
-    return deletedProduct;
   },
 };

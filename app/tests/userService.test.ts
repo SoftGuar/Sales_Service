@@ -18,7 +18,14 @@ describe("UserService", () => {
                 email: "john.doe@example.com",
                 password: "password123",
                 role: "user",
-            });
+            },
+            
+            {
+                first_name: "John",
+                last_name: "Doe",
+                email: "john.doe@example.com",
+                password: "password123"
+        });
 
             expect(result).toBeNull();
         });
