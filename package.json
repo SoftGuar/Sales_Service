@@ -6,7 +6,7 @@
     "start": "nodemon app/main.ts",
     "dev": "ts-node app/main.ts",
     "build": "tsc",
-    "test": "jest"
+    "test": "npx jest"
   },
   "keywords": [],
   "author": "",
