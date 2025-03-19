@@ -65,7 +65,7 @@ describe("userHandler", () => {
             });
         });
 
-        it("should return a 400 error if user and helper creation fails", async () => {
+        it("should return a 500 error if user and helper creation fails", async () => {
             const mockUserData: CreateUserInput = {
                 first_name: "John",
                 last_name: "Doe",
@@ -90,14 +90,14 @@ describe("userHandler", () => {
             await createUser(mockRequest, mockReply as FastifyReply);
 
             expect(UserService.createUserandHelper).toHaveBeenCalledWith(mockUserData, mockHelperData);
-            expect(mockReply.code).toHaveBeenCalledWith(400);
+            expect(mockReply.code).toHaveBeenCalledWith(500);
             expect(mockReply.send).toHaveBeenCalledWith({
                 success: false,
                 message: "User creation failed",
             });
         });
 
-        it("should return a 400 error with a generic message if an unexpected error occurs", async () => {
+        it("should return a 500 error with a generic message if an unexpected error occurs", async () => {
             const mockUserData: CreateUserInput = {
                 first_name: "John",
                 last_name: "Doe",
@@ -122,7 +122,7 @@ describe("userHandler", () => {
             await createUser(mockRequest, mockReply as FastifyReply);
 
             expect(UserService.createUserandHelper).toHaveBeenCalledWith(mockUserData, mockHelperData);
-            expect(mockReply.code).toHaveBeenCalledWith(400);
+            expect(mockReply.code).toHaveBeenCalledWith(500);
             expect(mockReply.send).toHaveBeenCalledWith({
                 success: false,
                 message: "An unexpected error occurred",
