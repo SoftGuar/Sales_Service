@@ -1,6 +1,7 @@
 import { QuotationService } from '../services/quotationService';
 import * as qm from '../models/quotationModel';
 import { FastifyRequest, FastifyReply } from 'fastify';
+import { Quotation } from '@prisma/client';
 
 /**
  * Represents the request body for creating a quotation.
@@ -186,5 +187,25 @@ export const getQuotationByUserId = async (
     }
   } catch (error: any) {
     reply.code(500).send({ message: 'An error occurred while getting quotations by user ID' });
+  }
+};
+/**
+ * Handles the creation of a quotation request with associated products.
+ * 
+ * @param request - The Fastify request object containing the user ID and products.
+ * @param reply - The Fastify reply object used to send the response.
+ * @returns A response confirming the creation of the quotation request or an error message.
+ */
+export const demandeQuotation = async (
+  request: FastifyRequest<{ Body: { user_id: number, products: { product_id: number, count: number }[] } }>,
+  reply: FastifyReply,
+) => {
+  try {
+      const { user_id, products } = request.body;
+      reply.log.info('Creating quotation request for user:', user_id);
+      const quotation = await QuotationService.demandeQuotation(user_id, products);
+      reply.code(201).send({ message: 'Quotation request created successfully', quotation });
+  } catch (error: any) {
+      reply.code(500).send({ message: 'An error occurred while creating quotation request', error: error.message });
   }
 };

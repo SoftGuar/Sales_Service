@@ -132,6 +132,7 @@ export const QuotationService = {
           product.count
         );
       }
+      return quotation;
     } catch (error) {
       console.error('Error creating quotation request:', error);
       throw new Error('Failed to create quotation request');

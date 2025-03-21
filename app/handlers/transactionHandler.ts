@@ -145,25 +145,3 @@ export const deleteTransaction = async (
         reply.code(500).send({ message: 'An error occurred while deleting transaction' });
     }
 }
-
-/**
- * Handles the creation of a product transaction.
- * 
- * @param request - The Fastify request object containing the product transaction data.
- * @param reply - The Fastify reply object used to send the response.
- * @returns A response with the newly created product transaction or an error message.
- */
-export const createProductTransaction = async (
-    request: FastifyRequest<ProductTransactionRequest>, reply: FastifyReply,) => {
-    const data = request.body;
-    try {
-        const productTransaction = await TransactionService.createProductTransaction(data);
-        if (productTransaction) {
-            reply.send(productTransaction);
-        } else {
-            reply.code(500).send({ message: 'An error occurred while creating product transaction' });
-        }
-    } catch (error: any) {
-        reply.code(500).send({ message: 'An error occurred while creating product transaction', error: error.message });
-    }
-};

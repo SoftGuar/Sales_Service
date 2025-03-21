@@ -1,5 +1,5 @@
 // app/services/userService.ts
-import { User } from '@prisma/client';
+import { Helper, User } from '@prisma/client';
 import { UserModel, CreateUserInput,CreateHelperInput } from '../models/userModel';
 import bcrypt from 'bcrypt';
 
@@ -11,22 +11,24 @@ export const UserService = {
    */
   createUserandHelper: async (dataUser: CreateUserInput,dataHelper:CreateHelperInput): Promise<object | null> => {
     try {
-      // TODO: Call the account management service to create accounts for both user and helper
-      const user = await fetch(
+      const user: User = await fetch(
         !process.env.API_GATEWAY
           ? 'http://localhost:3000/admin/account/user'
           : `${process.env.API_GATEWAY}/admin/account/user`,
         {
           method: 'POST',
           headers: {  
-            'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
           },
           body: JSON.stringify(dataUser),
         }
-      ).then((res) => 
-      {if (res.status != 200) {
-        throw new Error("Failed to create user");}});
-        const helper = await fetch( 
+      ).then(async (res) => {
+        if (res.status != 200) {
+          throw new Error("Failed to create user");
+        }
+        return res.json(); 
+      });
+        const helper: Helper = await fetch( 
           !process.env.API_GATEWAY
             ? 'http://localhost:3000/admin/account/helper'
             : `${process.env.API_GATEWAY}/admin/account/helper`,
@@ -37,9 +39,26 @@ export const UserService = {
             },
             body: JSON.stringify(dataHelper),
           }
+        ).then(async (res) => {
+          if (res.status != 200) {
+            throw new Error("Failed to create user");
+          }
+          return res.json(); 
+        });
+        const associate = await fetch(
+          !process.env.API_GATEWAY
+            ? `http://localhost:3000/accountManagment/user/${user.id}/helpers/${helper.id}`
+            : `${process.env.API_GATEWAY}/accountManagment/user/${user.id}/helpers/${helper.id}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId: user.id, helperId: helper.id }),
+          }
         ).then((res) =>
         {if (res.status != 200) {
-          throw new Error("Failed to create helper");}}
+          throw new Error("Failed to associate user and helper");}}
         );
         return { user, helper };
       

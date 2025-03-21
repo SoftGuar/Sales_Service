@@ -40,7 +40,7 @@ async function startServer() {
   
   // Start server
   try {
-    const port = Number(process.env.PORT) || 3001;
+    const port = Number(process.env.PORT) || 3003;
     const host = process.env.HOST || '0.0.0.0';
     await fastify.listen({ port, host });
     fastify.log.info(`Server started on port ${port}`);

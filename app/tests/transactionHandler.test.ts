@@ -4,7 +4,6 @@ import {
     getTransactionById,
     updateTransaction,
     deleteTransaction,
-    createProductTransaction,
     CreateTransactionRequest,
     UpdateTransactionRequest,
     ProductTransactionRequest
@@ -180,38 +179,6 @@ describe("deleteTransaction", () => {
         expect(TransactionService.deleteTransaction).toHaveBeenCalledWith(1);
         expect(mockReply.code).toHaveBeenCalledWith(500);
         expect(mockReply.send).toHaveBeenCalledWith({ message: "Failed to delete transaction" });
-    });
-});
-
-describe("createProductTransaction", () => {
-    it("should create a product transaction and return it", async () => {
-        const mockProductTransaction = { productId: 1, count: 2 };
-        const mockCreatedProductTransaction = { id: 1, ...mockProductTransaction };
-        (TransactionService.createProductTransaction as jest.Mock).mockResolvedValue(mockCreatedProductTransaction);
-
-        const mockRequest = {
-            body: mockProductTransaction,
-        } as unknown as FastifyRequest<ProductTransactionRequest>;
-
-        await createProductTransaction(mockRequest, mockReply as FastifyReply);
-
-        expect(TransactionService.createProductTransaction).toHaveBeenCalledWith(mockProductTransaction);
-        expect(mockReply.send).toHaveBeenCalledWith(mockCreatedProductTransaction);
-    });
-
-    it("should return a 500 error if product transaction creation fails", async () => {
-        const mockProductTransaction = { productId: 1, count: 2 };
-        (TransactionService.createProductTransaction as jest.Mock).mockResolvedValue(null);
-
-        const mockRequest = {
-            body: mockProductTransaction,
-        } as unknown as FastifyRequest<ProductTransactionRequest>;
-
-        await createProductTransaction(mockRequest, mockReply as FastifyReply);
-
-        expect(TransactionService.createProductTransaction).toHaveBeenCalledWith(mockProductTransaction);
-        expect(mockReply.code).toHaveBeenCalledWith(500);
-        expect(mockReply.send).toHaveBeenCalledWith({ message: "An error occurred while creating product transaction" });
     });
 });
 });
