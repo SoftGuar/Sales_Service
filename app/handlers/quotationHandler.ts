@@ -202,9 +202,8 @@ export const demandeQuotation = async (
 ) => {
   try {
       const { user_id, products } = request.body;
-      reply.log.info('Creating quotation request for user:', user_id);
       const quotation = await QuotationService.demandeQuotation(user_id, products);
-      reply.code(201).send({ message: 'Quotation request created successfully', quotation });
+      reply.code(201).send({ message: 'Quotation request created successfully', quotation: quotation });
   } catch (error: any) {
       reply.code(500).send({ message: 'An error occurred while creating quotation request', error: error.message });
   }
