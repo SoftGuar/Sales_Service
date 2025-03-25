@@ -2,13 +2,15 @@ import dotenv from 'dotenv';
 import Fastify from 'fastify';
 import { checkDatabaseConnection, disconnectPrisma } from './services/prismaService';
 import registerMiddlewares from './middlewares/index';
-import registerRoutes  from './routers/index';
+import registerRoutes from './routers/index';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
-var amqp = require('amqplib/callback_api');
 
 // Load environment variables
 dotenv.config();
+const host = process.env.HOST || 'localhost';
+const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+
 // Ensure DATABASE_URL is available
 if (!process.env.DATABASE_URL) {
   console.error('DATABASE_URL environment variable is not set');
@@ -17,31 +19,55 @@ if (!process.env.DATABASE_URL) {
 
 const fastify = Fastify({ logger: true });
 
+/**
+ * Starts the Fastify server after performing necessary setup tasks.
+ * 
+ * This function performs the following steps:
+ * 1. Checks the database connection to ensure the application can access the database.
+ * 2. Registers middlewares required for the application.
+ * 3. Configures Swagger for API documentation, including both the Swagger specification and the Swagger UI.
+ * 4. Registers application routes.
+ * 5. Starts the server and listens on the specified host and port.
+ * 
+ * If the server fails to start, the error is logged, and the process exits with a non-zero status code.
+ * 
+ * @async
+ * @throws Will throw an error if the server fails to start.
+ */
 async function startServer() {
-  
   // Check database connection first
   await checkDatabaseConnection();
-  
-   // 1. Register middlewares
-   registerMiddlewares(fastify);
-   // 2. Register routes
-   registerRoutes(fastify);
-   fastify.register(swagger, {
+
+  // 1. Register middlewares
+  registerMiddlewares(fastify);
+
+  fastify.register(swagger, {
     swagger: {
       info: {
-        title: 'API Docs',
-        description: 'API Documentation for the Fastify project',
-        version: '1.0.0',
+        title: 'My API',
+        description: 'API Documentation generated with Fastify Swagger',
+        version: '1.0.0'
       },
-    },
+      externalDocs: {
+        url: 'https://swagger.io',
+        description: 'Find more info here'
+      },
+      host: `${host}:${port}`,
+      schemes: ['http'],
+      consumes: ['application/json'],
+      produces: ['application/json']
+    }
   });
-  
-  fastify.register(swaggerUi);
-  
+
+  fastify.register(swaggerUi, {
+    routePrefix: '/docs'
+  });
+
+  // 3. Register routes
+  registerRoutes(fastify);
+
   // Start server
   try {
-    const port = Number(process.env.PORT) || 3003;
-    const host = process.env.HOST || '0.0.0.0';
     await fastify.listen({ port, host });
     fastify.log.info(`Server started on port ${port}`);
   } catch (err) {

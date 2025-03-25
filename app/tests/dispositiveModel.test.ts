@@ -6,7 +6,6 @@ jest.mock("../services/prismaService", () => {
     __esModule: true, // This is important for ES module compatibility
     default: {
       dispositive: {
-        findMany: jest.fn(),
         findFirst: jest.fn(),
       },
     },
@@ -22,41 +21,9 @@ describe("dispositiveModel", () => {
     jest.clearAllMocks();
   });
 
-  describe("getAllDispositives", () => {
-    it("should return an array of dispositives when prisma query succeeds", async () => {
-      const mockDispositives = [
-        { id: 1, name: "Dispositive 1" },
-        { id: 2, name: "Dispositive 2" },
-      ];
-
-      (prismaService.dispositive.findMany as jest.Mock).mockResolvedValue(
-        mockDispositives
-      );
-
-      const result = await dispositiveModel.getAllDispositives();
-
-      expect(prismaService.dispositive.findMany).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(mockDispositives);
-    });
-
-    test("getAllDispositives should return an empty array and log an error when Prisma query fails", async () => {
-        const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-      
-        (prismaService.dispositive.findMany as jest.Mock).mockRejectedValue(new Error("Database error"));
-      
-        const result = await dispositiveModel.getAllDispositives();
-      
-        expect(result).toEqual([]); // Ensure it returns an empty array
-        expect(consoleErrorSpy).toHaveBeenCalledWith("Failed to get dispositives:", expect.any(Error)); // Fix expected message
-      
-        consoleErrorSpy.mockRestore();
-      });
-      
-  });
-
   describe("findAvailableDispositive", () => {
     it("should return the first available dispositive when prisma query succeeds", async () => {
-      const mockDispositive = { id: 1, product_id: 123, user_id: NaN };
+      const mockDispositive = { id: 1, product_id: 123, user_id: null };
 
       (prismaService.dispositive.findFirst as jest.Mock).mockResolvedValue(
         mockDispositive
@@ -68,6 +35,22 @@ describe("dispositiveModel", () => {
         where: { product_id: 123, user_id: NaN },
       });
       expect(result).toEqual(mockDispositive);
+    });
+
+    it("should throw an error when prisma query fails", async () => {
+      const mockError = new Error("Database error");
+
+      (prismaService.dispositive.findFirst as jest.Mock).mockRejectedValue(
+        mockError
+      );
+
+      await expect(
+        dispositiveModel.findAvailableDispositive(123)
+      ).rejects.toThrow("An error occurred while retrieving the dispositive: Database error");
+
+      expect(prismaService.dispositive.findFirst).toHaveBeenCalledWith({
+        where: { product_id: 123, user_id: NaN },
+      });
     });
   });
 });

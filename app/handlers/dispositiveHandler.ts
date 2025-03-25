@@ -1,27 +1,6 @@
+import { Dispositive } from "@prisma/client";
 import dispositiveService from "../services/dispositiveService";
 import { FastifyRequest, FastifyReply } from "fastify";
-
-/**
- * Retrieves all dispositives from the database.
- * @param {FastifyRequest} request - The Fastify request object.
- * @param {FastifyReply} reply - The Fastify reply object.
- * @returns {Promise<void>} Sends a response with the list of dispositives or an error message.
- */
-export const getAllDispositives = async (
-  request: FastifyRequest,
-  reply: FastifyReply
-) => {
-  try {
-    const dispositives = await dispositiveService.getAllDispositives();
-    if (dispositives) {
-      reply.send(dispositives);
-    } else {
-      reply.code(500).send({ message: "Dispositive not found" });
-    }
-  } catch (error: any) {
-    reply.code(500).send({ message: "An error occurred while getting dispositives" });
-  }
-};
 
 /**
  * Retrieves an available dispositive for a specific product.
@@ -35,11 +14,11 @@ export const getAvailableDispositive = async (
 ) => {
   const productId = request.params.product_id;
   try {
-    const dispositive = await dispositiveService.findAvailableDispositive(Number(productId));
+    const dispositive:Dispositive = await dispositiveService.findAvailableDispositive(Number(productId));
     if (dispositive) {
-      reply.send(dispositive);
+      reply.code(200).send(dispositive);
     } else {
-      reply.code(404).send({ message: "Dispositive not found" });
+      reply.code(400).send({ message: "Dispositive not found" });
     }
   } catch (error: any) {
     reply.code(500).send({ message: "An error occurred while getting dispositive", error: error.message });
