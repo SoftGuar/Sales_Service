@@ -27,16 +27,16 @@ describe("productService", () => {
             expect(result).toEqual(mockProducts);
         });
 
-        it("should return an empty array when the database call returns null", async () => {
+        it("should throw an error when the database call fails", async () => {
             // Arrange
-            (productModel.getAllProducts as jest.Mock).mockResolvedValue([]);
+            const mockError = new Error("Database error");
+            (productModel.getAllProducts as jest.Mock).mockRejectedValue(mockError);
 
-            // Act
-            const result = await productService.getAllProducts();
-
-            // Assert
-            expect(productModel.getAllProducts).toHaveBeenCalledTimes(1);
-            expect(result).toEqual([]);
+            // Act & Assert
+            await expect(productService.getAllProducts()).rejects.toThrow(
+                "Error retrieving all products: Database error"
+            );
+            expect(productModel.getAllProducts).toHaveBeenCalled();
         });
     });
 
@@ -54,16 +54,37 @@ describe("productService", () => {
             expect(result).toEqual(mockProduct);
         });
 
-        it("should return null when no product is found", async () => {
+        it("should throw an error when no product is found", async () => {
             // Arrange
             (productModel.getProductById as jest.Mock).mockResolvedValue(null);
 
-            // Act
-            const result = await productService.getProductById(1);
-
-            // Assert
+            // Act & Assert
+            await expect(productService.getProductById(1)).rejects.toThrow(
+                "Product with ID 1 not found."
+            );
             expect(productModel.getProductById).toHaveBeenCalledWith(1);
-            expect(result).toBeNull();
+        });
+
+        it("should throw an error when an invalid ID is provided", async () => {
+            // Act & Assert
+            await expect(productService.getProductById(null as any)).rejects.toThrow(
+                "Invalid product ID provided."
+            );
+            await expect(productService.getProductById("abc" as any)).rejects.toThrow(
+                "Invalid product ID provided."
+            );
+        });
+
+        it("should throw an error when the database call fails", async () => {
+            // Arrange
+            const mockError = new Error("Database error");
+            (productModel.getProductById as jest.Mock).mockRejectedValue(mockError);
+
+            // Act & Assert
+            await expect(productService.getProductById(1)).rejects.toThrow(
+                "Error retrieving product with ID 1: Database error"
+            );
+            expect(productModel.getProductById).toHaveBeenCalledWith(1);
         });
     });
 });

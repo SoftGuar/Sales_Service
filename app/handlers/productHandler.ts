@@ -11,11 +11,11 @@ export const getAllProducts = async (
   request: FastifyRequest,
   reply: FastifyReply
 ) => {
-  const products = await productService.getAllProducts();
-  if (products) {
+  try {
+    const products = await productService.getAllProducts();
     reply.send(products);
-  } else {
-    reply.code(500).send({ message: 'Failed to get products' });
+  } catch (error: any) {
+    reply.code(500).send({ message: 'Failed to get products', error: error.message });
   }
 };
 
@@ -29,11 +29,20 @@ export const getProductById = async (
   request: FastifyRequest<{ Params: { id: number } }>,
   reply: FastifyReply
 ) => {
-  const productId = Number(request.params.id);
-  const product = await productService.getProductById(productId);
-  if (product) {
+  try {
+    const productId = Number(request.params.id);
+    if (isNaN(productId)) {
+      reply.code(400).send({ message: 'Invalid product ID' });
+      return;
+    }
+
+    const product = await productService.getProductById(productId);
     reply.send(product);
-  } else {
-    reply.code(404).send({ message: 'Product not found' });
+  } catch (error: any) {
+    if (error.message.includes('not found')) {
+      reply.code(404).send({ message: error.message });
+    } else {
+      reply.code(500).send({ message: 'Failed to get product', error: error.message });
+    }
   }
 };

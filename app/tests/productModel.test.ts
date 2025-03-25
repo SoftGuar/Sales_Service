@@ -34,17 +34,10 @@ describe("productModel", () => {
       expect(result).toEqual(mockProducts);
     });
 
-    it("should return an empty array and log an error when Prisma query fails", async () => {
-      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-
+    it("should throw an error when Prisma query fails", async () => {
       (prismaService.product.findMany as jest.Mock).mockRejectedValue(new Error("Database error"));
 
-      const result = await productModel.getAllProducts();
-
-      expect(result).toEqual([]);
-      expect(consoleErrorSpy).toHaveBeenCalledWith("Failed to get products:", expect.any(Error));
-
-      consoleErrorSpy.mockRestore();
+      await expect(productModel.getAllProducts()).rejects.toThrow("Failed to get products: Database error");
     });
   });
 
@@ -62,17 +55,10 @@ describe("productModel", () => {
       expect(result).toEqual(mockProduct);
     });
 
-    it("should return null and log an error when Prisma query fails", async () => {
-      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-
+    it("should throw an error when Prisma query fails", async () => {
       (prismaService.product.findUnique as jest.Mock).mockRejectedValue(new Error("Database error"));
 
-      const result = await productModel.getProductById(1);
-
-      expect(result).toBeNull();
-      expect(consoleErrorSpy).toHaveBeenCalledWith("Failed to get product:", expect.any(Error));
-
-      consoleErrorSpy.mockRestore();
+      await expect(productModel.getProductById(1)).rejects.toThrow("Failed to get product with ID 1: Database error");
     });
   });
 });

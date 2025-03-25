@@ -1,4 +1,4 @@
-import {getAllProducts, getProductById } from "../handlers/productHandler";
+import { getAllProducts, getProductById } from "../handlers/productHandler";
 import { FastifyRequest, FastifyReply } from "fastify";
 
 // Mock the productService module
@@ -20,9 +20,9 @@ describe("productHandler", () => {
                 debug: jest.fn(),
                 fatal: jest.fn(),
                 trace: jest.fn(),
-                child: jest.fn(), // Mock the child method
-                level: "info", // Mock the level property
-                silent: jest.fn(), // Mock the silent method
+                child: jest.fn(),
+                level: "info",
+                silent: jest.fn(),
             },
         };
     });
@@ -45,7 +45,8 @@ describe("productHandler", () => {
 
         it("should return a 500 error if fetching products fails", async () => {
             // Arrange
-            (productService.getAllProducts as jest.Mock).mockResolvedValue(null);
+            const mockError = new Error("Database error");
+            (productService.getAllProducts as jest.Mock).mockRejectedValue(mockError);
 
             const mockRequest = {} as FastifyRequest;
 
@@ -55,7 +56,10 @@ describe("productHandler", () => {
             // Assert
             expect(productService.getAllProducts).toHaveBeenCalledTimes(1);
             expect(mockReply.code).toHaveBeenCalledWith(500);
-            expect(mockReply.send).toHaveBeenCalledWith({ message: "Failed to get products" });
+            expect(mockReply.send).toHaveBeenCalledWith({
+                message: "Failed to get products",
+                error: mockError.message,
+            });
         });
     });
 
@@ -75,9 +79,22 @@ describe("productHandler", () => {
             expect(mockReply.send).toHaveBeenCalledWith(mockProduct);
         });
 
+        it("should return a 400 error if product ID is invalid", async () => {
+            // Arrange
+            const mockRequest = { params: { id: NaN } } as FastifyRequest<{ Params: { id: number } }>;
+
+            // Act
+            await getProductById(mockRequest, mockReply as FastifyReply);
+
+            // Assert
+            expect(mockReply.code).toHaveBeenCalledWith(400);
+            expect(mockReply.send).toHaveBeenCalledWith({ message: "Invalid product ID" });
+        });
+
         it("should return a 404 error if product is not found", async () => {
             // Arrange
-            (productService.getProductById as jest.Mock).mockResolvedValue(null);
+            const mockError = new Error("Product not found");
+            (productService.getProductById as jest.Mock).mockRejectedValue(mockError);
 
             const mockRequest = { params: { id: 1 } } as FastifyRequest<{ Params: { id: number } }>;
 
@@ -87,7 +104,26 @@ describe("productHandler", () => {
             // Assert
             expect(productService.getProductById).toHaveBeenCalledWith(1);
             expect(mockReply.code).toHaveBeenCalledWith(404);
-            expect(mockReply.send).toHaveBeenCalledWith({ message: "Product not found" });
+            expect(mockReply.send).toHaveBeenCalledWith({ message: mockError.message });
+        });
+
+        it("should return a 500 error if fetching product fails", async () => {
+            // Arrange
+            const mockError = new Error("Database error");
+            (productService.getProductById as jest.Mock).mockRejectedValue(mockError);
+
+            const mockRequest = { params: { id: 1 } } as FastifyRequest<{ Params: { id: number } }>;
+
+            // Act
+            await getProductById(mockRequest, mockReply as FastifyReply);
+
+            // Assert
+            expect(productService.getProductById).toHaveBeenCalledWith(1);
+            expect(mockReply.code).toHaveBeenCalledWith(500);
+            expect(mockReply.send).toHaveBeenCalledWith({
+                message: "Failed to get product",
+                error: mockError.message,
+            });
         });
     });
 });
