@@ -26,7 +26,9 @@ describe("productModel", () => {
         { id: 2, name: "Product 2", description: "Desc 2", price: 200 },
       ];
 
-      (prismaService.product.findMany as jest.Mock).mockResolvedValueOnce(mockProducts);
+      (prismaService.product.findMany as jest.Mock).mockResolvedValueOnce(
+        mockProducts
+      );
 
       const result = await productModel.getAllProducts();
 
@@ -35,17 +37,28 @@ describe("productModel", () => {
     });
 
     it("should throw an error when Prisma query fails", async () => {
-      (prismaService.product.findMany as jest.Mock).mockRejectedValue(new Error("Database error"));
+      (prismaService.product.findMany as jest.Mock).mockRejectedValue(
+        new Error("Database error")
+      );
 
-      await expect(productModel.getAllProducts()).rejects.toThrow("Failed to get products: Database error");
+      await expect(productModel.getAllProducts()).rejects.toThrow(
+        "Failed to get products: Database error"
+      );
     });
   });
 
   describe("getProductById", () => {
     it("should return a product when prisma query succeeds", async () => {
-      const mockProduct = { id: 1, name: "Product 1", description: "Desc 1", price: 100 };
+      const mockProduct = {
+        id: 1,
+        name: "Product 1",
+        description: "Desc 1",
+        price: 100,
+      };
 
-      (prismaService.product.findUnique as jest.Mock).mockResolvedValueOnce(mockProduct);
+      (prismaService.product.findUnique as jest.Mock).mockResolvedValueOnce(
+        mockProduct
+      );
 
       const result = await productModel.getProductById(1);
 
@@ -56,9 +69,13 @@ describe("productModel", () => {
     });
 
     it("should throw an error when Prisma query fails", async () => {
-      (prismaService.product.findUnique as jest.Mock).mockRejectedValue(new Error("Database error"));
+      (prismaService.product.findUnique as jest.Mock).mockRejectedValue(
+        new Error("Database error")
+      );
 
-      await expect(productModel.getProductById(1)).rejects.toThrow("Failed to get product with ID 1: Database error");
+      await expect(productModel.getProductById(1)).rejects.toThrow(
+        "Failed to get product with ID 1: Database error"
+      );
     });
   });
 });

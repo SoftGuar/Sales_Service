@@ -33,7 +33,9 @@ export const productService = {
       }
       return product;
     } catch (error: any) {
-      throw new Error(`Error retrieving product with ID ${id}: ${error.message}`);
+      throw new Error(
+        `Error retrieving product with ID ${id}: ${error.message}`
+      );
     }
   },
 };

@@ -1,5 +1,5 @@
-import { productService } from '../services/productService';
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { productService } from "../services/productService";
+import { FastifyRequest, FastifyReply } from "fastify";
 
 /**
  * Retrieves all products.
@@ -15,7 +15,9 @@ export const getAllProducts = async (
     const products = await productService.getAllProducts();
     reply.send(products);
   } catch (error: any) {
-    reply.code(500).send({ message: 'Failed to get products', error: error.message });
+    reply
+      .code(500)
+      .send({ message: "Failed to get products", error: error.message });
   }
 };
 
@@ -32,17 +34,19 @@ export const getProductById = async (
   try {
     const productId = Number(request.params.id);
     if (isNaN(productId)) {
-      reply.code(400).send({ message: 'Invalid product ID' });
+      reply.code(400).send({ message: "Invalid product ID" });
       return;
     }
 
     const product = await productService.getProductById(productId);
     reply.send(product);
   } catch (error: any) {
-    if (error.message.includes('not found')) {
+    if (error.message.includes("not found")) {
       reply.code(404).send({ message: error.message });
     } else {
-      reply.code(500).send({ message: 'Failed to get product', error: error.message });
+      reply
+        .code(500)
+        .send({ message: "Failed to get product", error: error.message });
     }
   }
 };
