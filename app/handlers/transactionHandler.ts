@@ -40,7 +40,7 @@ export const createTransaction = async (
         reply.log.info('Creating transaction:', transaction);
         const newTransaction = await TransactionService.createTransaction(transaction);
         if (newTransaction) {
-            reply.code(201).send(newTransaction);
+            reply.code(201).send({transaction: newTransaction});
         } else {
             reply.code(500).send({ message: 'Failed to create transaction' });
         }

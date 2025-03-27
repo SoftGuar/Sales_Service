@@ -38,22 +38,13 @@ const createQuotationSchema = {
       type: "object",
       properties: {
         user_id: { type: "number" },
-        products: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              product_id: { type: "number" },
-              count: { type: "number" },
-            },
-            required: ["product_id", "count"],
-          },
-        },
+        date: { type: "string", format: "date-time" },
       },
-      required: ["user_id", "products"],
+      required: ["user_id", "date"],
     },
     response: {
       201: {
+        description: "Quotation created successfully",
         type: "object",
         properties: {
           message: { type: "string" },
@@ -84,16 +75,6 @@ const getAllQuotationsSchema = {
             id: { type: "number" },
             user_id: { type: "number" },
             date: { type: "string", format: "date-time" },
-            ProductQuotation: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  product_id: { type: "number" },
-                  count: { type: "number" },
-                },
-              },
-            },
           },
         },
       },
@@ -116,19 +97,8 @@ const updateQuotationSchema = {
       type: "object",
       properties: {
         user_id: { type: "number" },
-        products: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              product_id: { type: "number" },
-              count: { type: "number" },
-            },
-            required: ["product_id", "count"],
-          },
-        },
+        date: { type: "string", format: "date-time" },
       },
-      required: ["user_id", "products"],
     },
     response: {
       200: {
@@ -137,16 +107,6 @@ const updateQuotationSchema = {
           id: { type: "number" },
           user_id: { type: "number" },
           date: { type: "string", format: "date-time" },
-          ProductQuotation: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                product_id: { type: "number" },
-                count: { type: "number" },
-              },
-            },
-          },
         },
       },
     },
@@ -171,16 +131,6 @@ const getQuotationByIdSchema = {
           id: { type: "number" },
           user_id: { type: "number" },
           date: { type: "string", format: "date-time" },
-          ProductQuotation: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                product_id: { type: "number" },
-                count: { type: "number" },
-              },
-            },
-          },
         },
       },
     },
@@ -232,7 +182,9 @@ const associateProductSchema = {
       200: {
         type: "object",
         properties: {
-          message: { type: "string" },
+          product_id: { type: "number" },
+          count: { type: "number" },
+          quotation_id: { type: "number" },
         },
       },
     },
@@ -293,7 +245,6 @@ const demandeQuotationSchema = {
               product_id: { type: "number" },
               count: { type: "number" },
             },
-            required: ["product_id", "count"],
           },
         },
       },
@@ -309,8 +260,7 @@ const demandeQuotationSchema = {
             properties: {
               id: { type: "number" },
               user_id: { type: "number" },
-              date: { type: "string", format: "date-time" },
-              ProductQuotation: {
+              products: {
                 type: "array",
                 items: {
                   type: "object",

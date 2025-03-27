@@ -41,7 +41,7 @@ export const createQuotation = async (
     reply.log.info("Creating quotation:", quotation);
     const newQuotation = await QuotationService.createQuotation(quotation);
     if (newQuotation) {
-      reply.code(201).send(newQuotation);
+      reply.code(201).send({ message: "Quotation created successfully", quotation: newQuotation });
     } else {
       reply.code(500).send({ message: "Failed to create quotation" });
     }
@@ -65,7 +65,7 @@ export const getAllQuotations = async (
   try {
     const quotations = await QuotationService.getAllQuotations();
     if (quotations) {
-      reply.send(quotations);
+      reply.code(200).send(quotations);
     } else {
       reply.code(500).send({ message: "Failed to get quotations" });
     }
@@ -172,15 +172,15 @@ export const associateProduct = async (
 ) => {
   try {
     const quotationId = Number(request.params.id);
-    const productId = request.body.product_id;
-    const count = request.body.count;
+    const productId = Number(request.body.product_id);
+    const count = Number(request.body.count);
     const associatedProduct = await QuotationService.associateProduct(
       quotationId,
       productId,
       count
     );
     if (associatedProduct) {
-      reply.send(associatedProduct);
+      reply.code(200).send(associatedProduct);
     } else {
       reply.code(404).send({ message: "Product not found" });
     }

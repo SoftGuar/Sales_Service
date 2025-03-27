@@ -28,20 +28,18 @@ const createTransactionSchema = {
         description: "Creates a new transaction",
         tags: ["Transactions"],
         body: {
-            type: "object",
+            type: 'object',
+            required: ['user_id', 'commercial_id', 'date'],
             properties: {
-                user_id: { type: "number" },
-                commercial_id: { type: "number" },
-                processed: { type: "boolean", default: false },
-                date: { type: "string", format: "date-time" },
-            },
-            required: ["user_id", "commercial_id", "date"],
+                user_id: { type: 'number', description: 'The ID of the user associated with the transaction.' },
+                commercial_id: { type: 'number', description: 'The ID of the commercial associated with the transaction.' },
+                date: { type: 'string', format: 'date-time', description: 'The date and time of the transaction in ISO 8601 format.' }
+            }
         },
         response: {
             201: {
                 type: "object",
                 properties: {
-                    message: { type: "string" },
                     transaction: {
                         type: "object",
                         properties: {
@@ -99,7 +97,6 @@ const updateTransactionSchema = {
                 processed: { type: "boolean" },
                 date: { type: "string", format: "date-time" },
             },
-            required: ["user_id", "commercial_id", "processed", "date"],
         },
         response: {
             200: {
