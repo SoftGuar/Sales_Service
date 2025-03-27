@@ -51,7 +51,7 @@ describe("createTransaction", () => {
 
         expect(TransactionService.createTransaction).toHaveBeenCalledWith(mockTransaction);
         expect(mockReply.code).toHaveBeenCalledWith(201);
-        expect(mockReply.send).toHaveBeenCalledWith(mockCreatedTransaction);
+        expect(mockReply.send).toHaveBeenCalledWith({ transaction: mockCreatedTransaction });
     });
 
     it("should return a 500 error if transaction creation fails", async () => {

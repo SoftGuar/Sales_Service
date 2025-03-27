@@ -51,7 +51,10 @@ describe("createQuotation", () => {
 
         expect(QuotationService.createQuotation).toHaveBeenCalledWith(mockQuotation);
         expect(mockReply.code).toHaveBeenCalledWith(201);
-        expect(mockReply.send).toHaveBeenCalledWith(mockCreatedQuotation);
+        expect(mockReply.send).toHaveBeenCalledWith({
+            message: "Quotation created successfully",
+            quotation: mockCreatedQuotation,
+        });
     });
 
     it("should return a 500 error if quotation creation fails", async () => {
