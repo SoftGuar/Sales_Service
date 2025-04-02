@@ -67,4 +67,39 @@ export const transactionModel = {
             throw error;
         }
     },
+    async getSales(): Promise<{
+        userName: string;
+        commercialName: string;
+        date: Date;
+        dispositiveId: number;
+        Status: boolean;
+    }[]>{
+        try{
+            const sales = await prisma.productTransaction.findMany({
+                include: {
+                    transaction: {
+                        include: {
+                            User: true,
+                            Commercial: true
+                        }
+                    },
+                    dispositive: true,
+                }
+            });
+            const salesWithDetails = sales.map((sale) => {
+                return {
+                    userName: sale.transaction.User.first_name + ' ' + sale.transaction.User.last_name,
+                    commercialName: sale.transaction.Commercial.first_name + ' ' + sale.transaction.Commercial.last_name,
+                    date: sale.transaction.date,
+                    dispositiveId: sale.dispositive.id,
+                    Status: sale.isConfirmed
+                };
+            });
+            return salesWithDetails;
+        }
+        catch(error:any){
+            console.error('Error getting sales:', error);
+            throw error;
+        }
+    }
 };

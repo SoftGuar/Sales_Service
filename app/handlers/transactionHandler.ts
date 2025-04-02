@@ -145,3 +145,26 @@ export const deleteTransaction = async (
         reply.code(500).send({ message: 'An error occurred while deleting transaction' });
     }
 }
+
+/**
+ * Handles the retrieval of sales details.
+ * 
+ * @param request - The Fastify request object.
+ * @param reply - The Fastify reply object used to send the response.
+ * @returns A response with the list of sales details or an error message.
+ */
+export const getSales = async (
+    request: FastifyRequest,
+    reply: FastifyReply,
+) => {
+    try {
+        const sales = await TransactionService.getSales();
+        if (sales) {
+            reply.code(200).send(sales);
+        } else {
+            reply.code(500).send({ message: 'Failed to get sales details' });
+        }
+    } catch (error: any) {
+        reply.code(500).send({ message: 'An error occurred while getting sales details' });
+    }
+}

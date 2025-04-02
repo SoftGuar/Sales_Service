@@ -14,6 +14,7 @@ jest.mock("../services/prismaService", () => ({
         },
         productTransaction: {
             create: jest.fn(),
+            findMany: jest.fn(),
         },
     },
 }));
@@ -151,6 +152,60 @@ describe("transactionModel", () => {
             (prismaService.productTransaction.create as jest.Mock).mockRejectedValue(new Error("Database error"));
 
             await expect(transactionModel.createProductTransaction(newProductTransaction)).rejects.toThrow("Database error");
+        });
+    });
+    describe("getSales", () => {
+        it("should return an array of sales details when prisma query succeeds", async () => {
+            const mockSales = [
+                {
+                    transaction: {
+                        User: { first_name: "John", last_name: "Doe" },
+                        Commercial: { first_name: "Lylia", last_name: "Aouinine" },
+                        date: new Date(),
+                    },
+                    dispositive: { id: 1 },
+                    isConfirmed: true,
+                },
+                {
+                    transaction: {
+                        User: { first_name: "Jane", last_name: "Smith" },
+                        Commercial: { first_name: "Alex", last_name: "Johnson" },
+                        date: new Date(),
+                    },
+                    dispositive: { id: 2 },
+                    isConfirmed: false,
+                },
+            ];
+
+            const expectedSalesDetails = [
+                {
+                    userName: "John Doe",
+                    commercialName: "Lylia Aouinine",
+                    date: mockSales[0].transaction.date,
+                    dispositiveId: 1,
+                    Status: true,
+                },
+                {
+                    userName: "Jane Smith",
+                    commercialName: "Alex Johnson",
+                    date: mockSales[1].transaction.date,
+                    dispositiveId: 2,
+                    Status: false,
+                },
+            ];
+
+            (prismaService.productTransaction.findMany as jest.Mock).mockResolvedValueOnce(mockSales);
+
+            const result = await transactionModel.getSales();
+
+            expect(prismaService.productTransaction.findMany).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(expectedSalesDetails);
+        });
+
+        it("should throw an error when prisma query fails", async () => {
+            (prismaService.productTransaction.findMany as jest.Mock).mockRejectedValue(new Error("Database error"));
+
+            await expect(transactionModel.getSales()).rejects.toThrow("Database error");
         });
     });
 });

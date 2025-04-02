@@ -20,9 +20,36 @@ async function transactionRoutes(fastify: FastifyInstance) {
     fastify.put('/:id', updateTransactionSchema, th.updateTransaction);
     fastify.get('/:id', getTransactionByIdSchema, th.getTransactionById);
     fastify.delete('/:id', deleteTransactionSchema, th.deleteTransaction);
+    fastify.get('/sales',getSalesSchema, th.getSales);
 }
 export default transactionRoutes;
-
+const getSalesSchema = {
+    schema: {
+        description: "Retrieves all sales details",
+        tags: ["Sales"],
+        response: {
+            200: {
+                type: "array",
+                items: {
+                    type: "object",
+                    properties: {
+                        userName: { type: "string", description: "The name of the user associated with the sale." },
+                        commercialName: { type: "string", description: "The name of the commercial associated with the sale." },
+                        date: { type: "string", format: "date-time", description: "The date and time of the sale in ISO 8601 format." },
+                        dispositiveId: { type: "number", description: "The ID of the dispositive associated with the sale." },
+                        Status: { type: "boolean", description: "The status of the sale." },
+                    },
+                },
+            },
+            500: {
+                type: "object",
+                properties: {
+                    message: { type: "string", description: "Error message in case of failure." },
+                },
+            },
+        },
+    },
+};
 const createTransactionSchema = {
     schema: {
         description: "Creates a new transaction",

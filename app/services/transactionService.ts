@@ -90,4 +90,23 @@ export const TransactionService = {
       throw error;
     }
   },
+  /**
+   * Retrieves sales details from the database.
+   * @returns {Promise<Array<Object>>} A promise that resolves to an array of sales details.
+   * @throws {Error} If the database query fails.
+   */
+  getSales: async (): Promise<Array<{
+        userName: string;
+        commercialName: string;
+        date: Date;
+        dispositiveId: number;
+        Status: boolean;
+  }>> => {
+    try {
+      return transactionModel.transactionModel.getSales();
+    } catch (error: any) {
+      console.error('Error getting sales:', error);
+      throw error;
+    }
+  }
 };
