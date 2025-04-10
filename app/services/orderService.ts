@@ -37,7 +37,6 @@ export const orderService = {
       const transaction = await TransactionService.createTransaction({
         user_id: data.user_id,
         commercial_id: data.commercial_id,
-        date: new Date(),
       });
 
       // Verify transaction was created

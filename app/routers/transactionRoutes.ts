@@ -21,7 +21,7 @@ async function transactionRoutes(fastify: FastifyInstance) {
     fastify.get('/:id', getTransactionByIdSchema, th.getTransactionById);
     fastify.delete('/:id', deleteTransactionSchema, th.deleteTransaction);
     fastify.get('/sales',getSalesSchema, th.getSales);
-    fastify.put('/sales/:id', confirmProductTransactionSchema, th.confirmProductTransaction);
+    fastify.put('/sales/:transaction_id/:dispositive_id', confirmProductTransactionSchema, th.confirmProductTransaction);
 }
 export default transactionRoutes;
 const confirmProductTransactionSchema={
@@ -43,7 +43,8 @@ const confirmProductTransactionSchema={
                     dispositive_id: { type: "number" },
                     transaction_id: { type: "number" },
                     isConfirmed: { type: "boolean" },
-                    date: { type: "string", format: "date-time" },
+                    created_at: { type: 'string', format: 'date-time' },
+                    updated_at: { type: 'string', format: 'date-time' }
                 },
             },
         },
