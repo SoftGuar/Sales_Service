@@ -166,6 +166,7 @@ describe("transactionModel", () => {
                     Dispositive: { id: 1 },
                     isConfirmed: true,
                     created_at: new Date(),
+                    transaction_id: 1,
                 },
                 {
                     Transaction: {
@@ -176,6 +177,7 @@ describe("transactionModel", () => {
                     Dispositive: {id: 2 },
                     isConfirmed: false,
                     created_at: new Date(),
+                    transaction_id: 2,
                 },
             ];
 
@@ -186,6 +188,7 @@ describe("transactionModel", () => {
                     dispositiveId: 1,
                     date: expect.any(Date), 
                     Status: true,
+                    transactionId: 1,
                 },
                 {
                     userName: "Jane Smith",
@@ -193,6 +196,7 @@ describe("transactionModel", () => {
                     dispositiveId: 2,
                     date: expect.any(Date), 
                     Status: false,
+                    transactionId: 2,
                 },
             ];
 

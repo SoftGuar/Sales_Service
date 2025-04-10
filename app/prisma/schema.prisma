@@ -108,7 +108,7 @@ model ProductTransaction {
   created_at     DateTime    @default(now())
   updated_at     DateTime    @updatedAt
   Dispositive    Dispositive @relation(fields: [dispositive_id], references: [id])
-  Transaction    Transaction @relation(fields: [transaction_id], references: [id])
+  Transaction    Transaction @relation(fields: [transaction_id], references: [id],onDelete: Cascade)
   @@id([transaction_id, dispositive_id])
 }
 

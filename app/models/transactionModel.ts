@@ -68,6 +68,7 @@ export const transactionModel = {
   },
   async getSales(): Promise<
     {
+      transactionId: number;
       userName: string;
       commercialName: string;
       date: Date;
@@ -89,6 +90,7 @@ export const transactionModel = {
       });
       const salesWithDetails = sales.map((sale) => {
         return {
+          transactionId: sale.transaction_id,
           userName:
             sale.Transaction.User.first_name +
             " " +

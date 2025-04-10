@@ -96,6 +96,7 @@ export const TransactionService = {
    * @throws {Error} If the database query fails.
    */
   getSales: async (): Promise<Array<{
+        transactionId: number;
         userName: string;
         commercialName: string;
         date: Date;

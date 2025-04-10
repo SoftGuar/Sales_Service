@@ -59,6 +59,7 @@ const getSalesSchema = {
                 items: {
                     type: "object",
                     properties: {
+                        transactionId: { type: "number", description: "The ID of the transaction." },
                         userName: { type: "string", description: "The name of the user associated with the sale." },
                         commercialName: { type: "string", description: "The name of the commercial associated with the sale." },
                         date: { type: "string", format: "date-time", description: "The date and time of the sale in ISO 8601 format." },
