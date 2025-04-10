@@ -108,5 +108,13 @@ export const TransactionService = {
       console.error('Error getting sales:', error);
       throw error;
     }
+  },
+  confirmProductTransaction: async (transaction_id: number, dispositive_id:number) => {
+    try {
+      return transactionModel.transactionModel.confirmProductTransaction(transaction_id, dispositive_id);
+    } catch (error: any) {
+      console.error('Error updating product transaction:', error);
+      throw error;
+    }
   }
 };

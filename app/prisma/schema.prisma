@@ -48,6 +48,8 @@ model Dispositive {
   state              String
   user_id            Int?
   product_id         Int
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt 
   DispoIssue         DispoIssue[]
   Product            Product              @relation(fields: [product_id], references: [id], onDelete: Cascade)
   User               User?                @relation(fields: [user_id], references: [id], onDelete: Cascade)
@@ -81,6 +83,8 @@ model Product {
   name             String
   description      String?
   price            Float
+  created_at       DateTime           @default(now())
+  updated_at       DateTime           @updatedAt
   Dispositive      Dispositive[]
   ProductQuotation ProductQuotation[]
 }
@@ -89,6 +93,8 @@ model ProductQuotation {
   quotation_id Int
   product_id   Int
   count        Int
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
   Product      Product   @relation(fields: [product_id], references: [id], onDelete: Cascade)
   Quotation    Quotation @relation(fields: [quotation_id], references: [id], onDelete: Cascade)
 
@@ -96,18 +102,21 @@ model ProductQuotation {
 }
 
 model ProductTransaction {
-  id             Int         @id @default(autoincrement())
   transaction_id Int
   dispositive_id Int
   isConfirmed    Boolean     @default(false)
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
   Dispositive    Dispositive @relation(fields: [dispositive_id], references: [id])
   Transaction    Transaction @relation(fields: [transaction_id], references: [id])
+  @@id([transaction_id, dispositive_id])
 }
 
 model Quotation {
   id               Int                @id @default(autoincrement())
   user_id          Int
-  date             DateTime
+  created_at         DateTime           @default(now())
+  updated_at         DateTime           @updatedAt
   ProductQuotation ProductQuotation[]
   User             User               @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
@@ -126,7 +135,8 @@ model Transaction {
   id                 Int                  @id @default(autoincrement())
   user_id            Int
   commercial_id      Int
-  date               DateTime
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt
   ProductTransaction ProductTransaction[]
   Commercial         Commercial           @relation(fields: [commercial_id], references: [id], onDelete: Cascade)
   User               User                 @relation(fields: [user_id], references: [id], onDelete: Cascade)

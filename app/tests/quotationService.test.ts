@@ -11,12 +11,12 @@ describe("QuotationService", () => {
 
     describe("createQuotation", () => {
         it("should create a quotation successfully", async () => {
-            const mockQuotation = { id: 1, user_id: 1, date: new Date() };
+            const mockQuotation = { id: 1, user_id: 1 };
             (quotationModel.QuotationModel.create as jest.Mock).mockResolvedValue(mockQuotation);
 
-            const result = await QuotationService.createQuotation({ user_id: 1, date: new Date() });
+            const result = await QuotationService.createQuotation({ user_id: 1});
 
-            expect(quotationModel.QuotationModel.create).toHaveBeenCalledWith({ user_id: 1, date: expect.any(Date) });
+            expect(quotationModel.QuotationModel.create).toHaveBeenCalledWith(expect.objectContaining({ user_id: 1 }));
             expect(result).toEqual(mockQuotation);
         });
 
@@ -24,14 +24,14 @@ describe("QuotationService", () => {
             (quotationModel.QuotationModel.create as jest.Mock).mockRejectedValue(new Error("Creation error"));
 
             await expect(
-                QuotationService.createQuotation({ user_id: 1, date: new Date() })
+                QuotationService.createQuotation({ user_id: 1 })
             ).rejects.toThrow("Failed to create quotation");
         });
     });
 
     describe("getQuotationById", () => {
         it("should return a quotation by ID", async () => {
-            const mockQuotation = { id: 1, user_id: 1, date: new Date() };
+            const mockQuotation = { id: 1, user_id: 1 };
             (quotationModel.QuotationModel.findById as jest.Mock).mockResolvedValue(mockQuotation);
 
             const result = await QuotationService.getQuotationById(1);
@@ -50,8 +50,8 @@ describe("QuotationService", () => {
     describe("getAllQuotations", () => {
         it("should return all quotations", async () => {
             const mockQuotations = [
-                { id: 1, user_id: 1, date: new Date() },
-                { id: 2, user_id: 2, date: new Date() },
+                { id: 1, user_id: 1},
+                { id: 2, user_id: 2},
             ];
             (quotationModel.QuotationModel.getAll as jest.Mock).mockResolvedValue(mockQuotations);
 
@@ -70,7 +70,7 @@ describe("QuotationService", () => {
 
     describe("updateQuotation", () => {
         it("should update a quotation successfully", async () => {
-            const mockUpdatedQuotation = { id: 1, user_id: 1, date: new Date() };
+            const mockUpdatedQuotation = { id: 1, user_id: 1};
             (quotationModel.QuotationModel.update as jest.Mock).mockResolvedValue(mockUpdatedQuotation);
 
             const result = await QuotationService.updateQuotation(1, { user_id: 2 });
@@ -90,7 +90,7 @@ describe("QuotationService", () => {
 
     describe("deleteQuotation", () => {
         it("should delete a quotation successfully", async () => {
-            const mockDeletedQuotation = { id: 1, user_id: 1, date: new Date() };
+            const mockDeletedQuotation = { id: 1, user_id: 1 };
             (quotationModel.QuotationModel.delete as jest.Mock).mockResolvedValue(mockDeletedQuotation);
 
             const result = await QuotationService.deleteQuotation(1);
@@ -129,8 +129,8 @@ describe("QuotationService", () => {
     describe("findByUserId", () => {
         it("should return quotations for a specific user", async () => {
             const mockQuotations = [
-                { id: 1, user_id: 1, date: new Date() },
-                { id: 2, user_id: 1, date: new Date() },
+                { id: 1, user_id: 1 },
+                { id: 2, user_id: 1},
             ];
             (quotationModel.QuotationModel.findByUserId as jest.Mock).mockResolvedValue(mockQuotations);
 
@@ -149,7 +149,7 @@ describe("QuotationService", () => {
 
     describe("demandeQuotation", () => {
         it("should create a quotation and associate products successfully", async () => {
-            const mockQuotation = { id: 1, user_id: 1, date: new Date() };
+            const mockQuotation = { id: 1, user_id: 1 };
             const mockAssociation = { id: 1, product_id: 1, quotation_id: 1, count: 2 };
 
             (quotationModel.QuotationModel.create as jest.Mock).mockResolvedValue(mockQuotation);
@@ -157,12 +157,12 @@ describe("QuotationService", () => {
 
             await QuotationService.demandeQuotation(1, [{ product_id: 1, count: 2 }]);
 
-            expect(quotationModel.QuotationModel.create).toHaveBeenCalledWith({ user_id: 1, date: expect.any(Date) });
+            expect(quotationModel.QuotationModel.create).toHaveBeenCalledWith({ user_id: 1});
             expect(quotationModel.QuotationModel.associateProduct).toHaveBeenCalledWith(1, 1, 2);
         });
 
         it("should throw an error if product association fails", async () => {
-            const mockQuotation = { id: 1, user_id: 1, date: new Date() };
+            const mockQuotation = { id: 1, user_id: 1 };
 
             (quotationModel.QuotationModel.create as jest.Mock).mockResolvedValue(mockQuotation);
             (quotationModel.QuotationModel.associateProduct as jest.Mock).mockRejectedValue(new Error("Association error"));

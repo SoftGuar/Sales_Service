@@ -122,7 +122,6 @@ export const QuotationService = {
     try {
       const quotation = await quotationModel.QuotationModel.create({
         user_id,
-        date: new Date(),
       });
       for (let product of products) {
         await quotationModel.QuotationModel.associateProduct(

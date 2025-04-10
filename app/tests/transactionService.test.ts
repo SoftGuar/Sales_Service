@@ -13,12 +13,12 @@ describe("TransactionService", () => {
 
     describe("createTransaction", () => {
         it("should create a transaction successfully", async () => {
-            const mockTransaction = { id: 1, user_id: 1, commercial_id: 2, date: new Date() };
+            const mockTransaction = { id: 1, user_id: 1, commercial_id: 2 };
             (transactionModel.transactionModel.createTransaction as jest.Mock).mockResolvedValue(mockTransaction);
 
-            const result = await TransactionService.createTransaction({ user_id: 1, commercial_id: 2, date: new Date() });
+            const result = await TransactionService.createTransaction({ user_id: 1, commercial_id: 2 });
 
-            expect(transactionModel.transactionModel.createTransaction).toHaveBeenCalledWith({ user_id: 1, commercial_id: 2, date: expect.any(Date) });
+            expect(transactionModel.transactionModel.createTransaction).toHaveBeenCalledWith({ user_id: 1, commercial_id: 2 });
             expect(result).toEqual(mockTransaction);
         });
 
@@ -26,7 +26,7 @@ describe("TransactionService", () => {
             (transactionModel.transactionModel.createTransaction as jest.Mock).mockRejectedValue(new Error("Creation error"));
 
             await expect(
-                TransactionService.createTransaction({ user_id: 1, commercial_id: 2, date: new Date() })
+                TransactionService.createTransaction({ user_id: 1, commercial_id: 2 })
             ).rejects.toThrow("Creation error");
         });
     });
@@ -34,8 +34,8 @@ describe("TransactionService", () => {
     describe("getTransactions", () => {
         it("should return all transactions", async () => {
             const mockTransactions = [
-                { id: 1, user_id: 1, commercial_id: 2, date: new Date() },
-                { id: 2, user_id: 2, commercial_id: 3, date: new Date() },
+                { id: 1, user_id: 1, commercial_id: 2 },
+                { id: 2, user_id: 2, commercial_id: 3 },
             ];
             (transactionModel.transactionModel.getTransactions as jest.Mock).mockResolvedValue(mockTransactions);
 
@@ -54,7 +54,7 @@ describe("TransactionService", () => {
 
     describe("getTransactionById", () => {
         it("should return a transaction by ID", async () => {
-            const mockTransaction = { id: 1, user_id: 1, commercial_id: 2, date: new Date() };
+            const mockTransaction = { id: 1, user_id: 1, commercial_id: 2 };
             (transactionModel.transactionModel.getTransactionById as jest.Mock).mockResolvedValue(mockTransaction);
 
             const result = await TransactionService.getTransactionById(1);
@@ -72,7 +72,7 @@ describe("TransactionService", () => {
 
     describe("updateTransaction", () => {
         it("should update a transaction successfully", async () => {
-            const mockUpdatedTransaction = { id: 1, user_id: 1, commercial_id: 3, date: new Date() };
+            const mockUpdatedTransaction = { id: 1, user_id: 1, commercial_id: 3 };
             (transactionModel.transactionModel.updateTransaction as jest.Mock).mockResolvedValue(mockUpdatedTransaction);
 
             const result = await TransactionService.updateTransaction(1, { commercial_id: 3 });
@@ -92,7 +92,7 @@ describe("TransactionService", () => {
 
     describe("deleteTransaction", () => {
         it("should delete a transaction successfully", async () => {
-            const mockDeletedTransaction = { id: 1, user_id: 1, commercial_id: 2, date: new Date() };
+            const mockDeletedTransaction = { id: 1, user_id: 1, commercial_id: 2 };
             (transactionModel.transactionModel.deleteTransaction as jest.Mock).mockResolvedValue(mockDeletedTransaction);
 
             const result = await TransactionService.deleteTransaction(1);

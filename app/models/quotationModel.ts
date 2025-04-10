@@ -3,12 +3,10 @@ import prisma from "../services/prismaService";
 
 export interface CreateQuotationInput {
   user_id: number;
-  date: Date;
 }
 
 export interface UpdateQuotationInput {
   user_id?: number;
-  date?: Date;
 }
 
 export const QuotationModel = {

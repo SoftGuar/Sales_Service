@@ -1,6 +1,7 @@
 import { TransactionService } from "../services/transactionService";
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { CreateTransactionInput, UpdateTransactionInput, ProductTransactionInput } from "../models/transactionModel";
+import { CreateTransactionInput, UpdateTransactionInput, ProductTransactionInput} from "../models/transactionModel";
+import { request } from "http";
 
 /**
  * Interface defining the structure of a request to create a transaction.
@@ -22,6 +23,9 @@ export interface UpdateTransactionRequest {
  */
 export interface ProductTransactionRequest {
     Body: ProductTransactionInput;
+}
+export interface ProductTransactionUpdateRequest {
+    Params: { transaction_id: number; dispositive_id: number };
 }
 
 /**
@@ -166,5 +170,23 @@ export const getSales = async (
         }
     } catch (error: any) {
         reply.code(500).send({ message: 'An error occurred while getting sales details' });
+    }
+}
+
+export const confirmProductTransaction= async (
+    request: FastifyRequest<ProductTransactionUpdateRequest>,
+    reply: FastifyReply,
+)=>{
+    try {
+        const transactionId = Number(request.params.transaction_id);
+        const dispositiveId = Number(request.params.dispositive_id);
+        const updatedTransaction = await TransactionService.confirmProductTransaction(transactionId,  dispositiveId);
+        if (updatedTransaction) {
+            reply.code(200).send(updatedTransaction);
+        } else {
+            reply.code(500).send({ message: 'Failed to update product transaction' });
+        }
+    } catch (error: any) {
+        reply.code(500).send({ message: 'An error occurred while updating product transaction' });
     }
 }

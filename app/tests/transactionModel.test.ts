@@ -1,3 +1,4 @@
+import { create } from "domain";
 import { transactionModel } from "../models/transactionModel";
 import prismaService from "../services/prismaService";
 
@@ -26,7 +27,7 @@ describe("transactionModel", () => {
 
     describe("createTransaction", () => {
         it("should create and return a transaction when prisma query succeeds", async () => {
-            const newTransaction = { user_id: 1, commercial_id: 2, date: new Date() };
+            const newTransaction = { user_id: 1, commercial_id: 2};
             const createdTransaction = { id: 1, ...newTransaction };
 
             (prismaService.transaction.create as jest.Mock).mockResolvedValueOnce(createdTransaction);
@@ -38,7 +39,7 @@ describe("transactionModel", () => {
         });
 
         it("should throw an error when prisma query fails", async () => {
-            const newTransaction = { user_id: 1, commercial_id: 2, date: new Date() };
+            const newTransaction = { user_id: 1, commercial_id: 2 };
 
             (prismaService.transaction.create as jest.Mock).mockRejectedValue(new Error("Database error"));
 
@@ -49,8 +50,8 @@ describe("transactionModel", () => {
     describe("getTransactions", () => {
         it("should return an array of transactions when prisma query succeeds", async () => {
             const mockTransactions = [
-                { id: 1, user_id: 1, commercial_id: 2, date: new Date() },
-                { id: 2, user_id: 3, commercial_id: 4, date: new Date() },
+                { id: 1, user_id: 1, commercial_id: 2 },
+                { id: 2, user_id: 3, commercial_id: 4 },
             ];
 
             (prismaService.transaction.findMany as jest.Mock).mockResolvedValueOnce(mockTransactions);
@@ -70,7 +71,7 @@ describe("transactionModel", () => {
 
     describe("getTransactionById", () => {
         it("should return a transaction when prisma query succeeds", async () => {
-            const mockTransaction = { id: 1, user_id: 1, commercial_id: 2, date: new Date() };
+            const mockTransaction = { id: 1, user_id: 1, commercial_id: 2 };
 
             (prismaService.transaction.findUnique as jest.Mock).mockResolvedValueOnce(mockTransaction);
 
@@ -89,7 +90,7 @@ describe("transactionModel", () => {
 
     describe("updateTransaction", () => {
         it("should update and return a transaction when prisma query succeeds", async () => {
-            const updatedTransaction = { user_id: 2, commercial_id: 3, date: new Date() };
+            const updatedTransaction = { user_id: 2, commercial_id: 3 };
             const mockUpdatedTransaction = { id: 1, ...updatedTransaction };
 
             (prismaService.transaction.update as jest.Mock).mockResolvedValueOnce(mockUpdatedTransaction);
@@ -104,7 +105,7 @@ describe("transactionModel", () => {
         });
 
         it("should throw an error when prisma query fails", async () => {
-            const updatedTransaction = { user_id: 2, commercial_id: 3, date: new Date() };
+            const updatedTransaction = { user_id: 2, commercial_id: 3 };
 
             (prismaService.transaction.update as jest.Mock).mockRejectedValue(new Error("Database error"));
 
@@ -114,7 +115,7 @@ describe("transactionModel", () => {
 
     describe("deleteTransaction", () => {
         it("should delete and return a transaction when prisma query succeeds", async () => {
-            const mockDeletedTransaction = { id: 1, user_id: 1, commercial_id: 2, date: new Date() };
+            const mockDeletedTransaction = { id: 1, user_id: 1, commercial_id: 2 };
 
             (prismaService.transaction.delete as jest.Mock).mockResolvedValueOnce(mockDeletedTransaction);
 
@@ -158,22 +159,23 @@ describe("transactionModel", () => {
         it("should return an array of sales details when prisma query succeeds", async () => {
             const mockSales = [
                 {
-                    transaction: {
+                    Transaction: {
                         User: { first_name: "John", last_name: "Doe" },
                         Commercial: { first_name: "Lylia", last_name: "Aouinine" },
-                        date: new Date(),
                     },
-                    dispositive: { id: 1 },
+                    Dispositive: { id: 1 },
                     isConfirmed: true,
+                    created_at: new Date(),
                 },
                 {
-                    transaction: {
+                    Transaction: {
                         User: { first_name: "Jane", last_name: "Smith" },
                         Commercial: { first_name: "Alex", last_name: "Johnson" },
-                        date: new Date(),
+                        
                     },
-                    dispositive: { id: 2 },
+                    Dispositive: {id: 2 },
                     isConfirmed: false,
+                    created_at: new Date(),
                 },
             ];
 
@@ -181,15 +183,15 @@ describe("transactionModel", () => {
                 {
                     userName: "John Doe",
                     commercialName: "Lylia Aouinine",
-                    date: mockSales[0].transaction.date,
                     dispositiveId: 1,
+                    date: expect.any(Date), 
                     Status: true,
                 },
                 {
                     userName: "Jane Smith",
                     commercialName: "Alex Johnson",
-                    date: mockSales[1].transaction.date,
                     dispositiveId: 2,
+                    date: expect.any(Date), 
                     Status: false,
                 },
             ];
