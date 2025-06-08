@@ -1,41 +1,34 @@
-import { productModel } from "../models/productModel";
+// src/services/productService.ts
+import { productModel } from '../models/productModel';
+import {
+  ProductsRetrievalError,
+  InvalidProductIdError,
+  ProductNotFoundError,
+  ProductFetchError
+} from '../errors/ProductErrors';
 
 export const productService = {
-  /**
-   * Retrieves all products from the database.
-   * @returns {Promise<Array<Product>>} A promise that resolves to an array of product objects.
-   * @throws {Error} If the database query fails.
-   */
   async getAllProducts() {
     try {
-      const products = await productModel.getAllProducts();
-      return products;
-    } catch (error: any) {
-      throw new Error(`Error retrieving all products: ${error.message}`);
+      return await productModel.getAllProducts();
+    } catch (err: any) {
+      throw new ProductsRetrievalError();
     }
   },
 
-  /**
-   * Retrieves a product by its ID.
-   * @param {number} id - The ID of the product to retrieve.
-   * @returns {Promise<Product|null>} A promise that resolves to the product object, or null if not found.
-   * @throws {Error} If the database query fails or the ID is invalid.
-   */
   async getProductById(id: number) {
-    if (!id || typeof id !== "number") {
-      throw new Error("Invalid product ID provided.");
+    if (isNaN(id) || typeof id !== 'number') {
+      throw new InvalidProductIdError(id);
     }
-
     try {
       const product = await productModel.getProductById(id);
-      if (!product) {
-        throw new Error(`Product with ID ${id} not found.`);
-      }
+      if (!product) throw new ProductNotFoundError(id);
       return product;
-    } catch (error: any) {
-      throw new Error(
-        `Error retrieving product with ID ${id}: ${error.message}`
-      );
+    } catch (err: any) {
+      if (err instanceof InvalidProductIdError || err instanceof ProductNotFoundError) {
+        throw err;
+      }
+      throw new ProductFetchError(id, err);
     }
-  },
+  }
 };

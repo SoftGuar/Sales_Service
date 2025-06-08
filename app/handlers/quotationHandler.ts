@@ -36,7 +36,7 @@ export const createQuotation = async (
   request: FastifyRequest<CreateQuotationRequest>,
   reply: FastifyReply
 ) => {
-  try {
+
     const quotation = request.body;
     reply.log.info("Creating quotation:", quotation);
     const newQuotation = await QuotationService.createQuotation(quotation);
@@ -45,11 +45,6 @@ export const createQuotation = async (
     } else {
       reply.code(500).send({ message: "Failed to create quotation" });
     }
-  } catch (error: any) {
-    reply
-      .code(500)
-      .send({ message: "An error occurred while creating quotation" });
-  }
 };
 
 /**
@@ -62,18 +57,13 @@ export const getAllQuotations = async (
   request: FastifyRequest,
   reply: FastifyReply
 ) => {
-  try {
+
     const quotations = await QuotationService.getAllQuotations();
     if (quotations) {
       reply.code(200).send(quotations);
     } else {
       reply.code(500).send({ message: "Failed to get quotations" });
     }
-  } catch (error: any) {
-    reply
-      .code(500)
-      .send({ message: "An error occurred while getting quotations" });
-  }
 };
 
 /**
@@ -86,7 +76,7 @@ export const getQuotationById = async (
   request: FastifyRequest<{ Params: { id: number } }>,
   reply: FastifyReply
 ) => {
-  try {
+
     const quotationId = Number(request.params.id);
     const quotation = await QuotationService.getQuotationById(quotationId);
     if (quotation) {
@@ -94,11 +84,6 @@ export const getQuotationById = async (
     } else {
       reply.code(404).send({ message: "Quotation not found" });
     }
-  } catch (error: any) {
-    reply
-      .code(500)
-      .send({ message: "An error occurred while getting quotation" });
-  }
 };
 
 /**
@@ -111,7 +96,7 @@ export const updateQuotation = async (
   request: FastifyRequest<UpdateQuotationRequest>,
   reply: FastifyReply
 ) => {
-  try {
+
     const quotationId = Number(request.params.id);
     const quotation = request.body;
     const updatedQuotation = await QuotationService.updateQuotation(
@@ -123,14 +108,6 @@ export const updateQuotation = async (
     } else {
       reply.code(404).send({ message: "Quotation not found" });
     }
-  } catch (error: any) {
-    reply
-      .code(500)
-      .send({
-        message: "An error occurred while updating quotation",
-        error: error.message,
-      });
-  }
 };
 
 /**
@@ -143,7 +120,7 @@ export const deleteQuotation = async (
   request: FastifyRequest<{ Params: { id: number } }>,
   reply: FastifyReply
 ) => {
-  try {
+
     const quotationId = Number(request.params.id);
     const deletedQuotation = await QuotationService.deleteQuotation(
       quotationId
@@ -153,11 +130,6 @@ export const deleteQuotation = async (
     } else {
       reply.code(404).send({ message: "Quotation not found" });
     }
-  } catch (error: any) {
-    reply
-      .code(500)
-      .send({ message: "An error occurred while deleting quotation" });
-  }
 };
 
 /**
@@ -170,7 +142,7 @@ export const associateProduct = async (
   request: FastifyRequest<AssociateProductRequest>,
   reply: FastifyReply
 ) => {
-  try {
+
     const quotationId = Number(request.params.id);
     const productId = Number(request.body.product_id);
     const count = Number(request.body.count);
@@ -184,9 +156,6 @@ export const associateProduct = async (
     } else {
       reply.code(404).send({ message: "Product not found" });
     }
-  } catch (error: any) {
-    reply.code(500).send({ message: "Failed to associate product" });
-  }
 };
 
 /**
@@ -199,7 +168,6 @@ export const getQuotationByUserId = async (
   request: FastifyRequest<{ Params: { user_id: number } }>,
   reply: FastifyReply
 ) => {
-  try {
     const user_id = Number(request.params.user_id);
     const quotations = await QuotationService.findByUserId(user_id);
     if (quotations) {
@@ -207,13 +175,6 @@ export const getQuotationByUserId = async (
     } else {
       reply.code(404).send({ message: "Quotation not found" });
     }
-  } catch (error: any) {
-    reply
-      .code(500)
-      .send({
-        message: "An error occurred while getting quotations by user ID",
-      });
-  }
 };
 /**
  * Handles the creation of a quotation request with associated products.
@@ -231,7 +192,7 @@ export const demandeQuotation = async (
   }>,
   reply: FastifyReply
 ) => {
-  try {
+
     const { user_id, products } = request.body;
     const quotation = await QuotationService.demandeQuotation(
       user_id,
@@ -243,12 +204,4 @@ export const demandeQuotation = async (
         message: "Quotation request created successfully",
         quotation: quotation,
       });
-  } catch (error: any) {
-    reply
-      .code(500)
-      .send({
-        message: "An error occurred while creating quotation request",
-        error: error.message,
-      });
-  }
 };

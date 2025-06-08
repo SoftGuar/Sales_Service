@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import * as qh from "../handlers/quotationHandler";
+import { CommonErrorResponses } from './baseSchema';
 
 /**
  * Registers the routes for managing quotations in the Fastify application.
@@ -58,6 +59,7 @@ const createQuotationSchema = {
           },
         },
       },
+      ...CommonErrorResponses,
     },
   },
 };
@@ -78,6 +80,7 @@ const getAllQuotationsSchema = {
           },
         },
       },
+      ...CommonErrorResponses,
     },
   },
 };
@@ -109,6 +112,7 @@ const updateQuotationSchema = {
           date: { type: "string", format: "date-time" },
         },
       },
+      ...CommonErrorResponses,
     },
   },
 };
@@ -133,6 +137,7 @@ const getQuotationByIdSchema = {
           date: { type: "string", format: "date-time" },
         },
       },
+      ...CommonErrorResponses,
     },
   },
 };
@@ -155,6 +160,7 @@ const deleteQuotationSchema = {
           message: { type: "string" },
         },
       },
+      ...CommonErrorResponses,
     },
   },
 };
@@ -187,6 +193,7 @@ const associateProductSchema = {
           quotation_id: { type: "number" },
         },
       },
+      ...CommonErrorResponses,
     },
   },
 };
@@ -224,6 +231,7 @@ const getQuotationByUserIdSchema = {
           },
         },
       },
+      ...CommonErrorResponses,
     },
   },
 };
@@ -274,6 +282,7 @@ const demandeQuotationSchema = {
           },
         },
       },
+      ...CommonErrorResponses,
     },
   },
 };

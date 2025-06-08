@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import * as pm from "../handlers/productHandler";
+import { CommonErrorResponses } from './baseSchema';
 
 /**
  * Defines the routes for product-related operations in the application.
@@ -37,6 +38,8 @@ const getAllProductsSchema = {
           required: ["id", "name", "price"],
         },
       },
+      ...CommonErrorResponses,
+      
     },
   },
 };
@@ -63,28 +66,7 @@ const getProductByIdSchema = {
         },
         required: ["id", "name", "price"],
       },
-      400: {
-        type: "object",
-        properties: {
-          message: { type: "string" },
-        },
-        required: ["message"],
-      },
-      404: {
-        type: "object",
-        properties: {
-          message: { type: "string" },
-        },
-        required: ["message"],
-      },
-      500: {
-        type: "object",
-        properties: {
-          message: { type: "string" },
-          error: { type: "string" },
-        },
-        required: ["message", "error"],
-      },
+      ...CommonErrorResponses,
     },
   },
 };

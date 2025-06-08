@@ -40,7 +40,7 @@ export const orderHandler = async (
   const userId = Number(request.body.user_id);
   const commercialId = Number(request.body.commercial_id);
 
-  try {
+
     // Make sure to await the async operation
     const result = await orderService.order({
       user_id: userId,
@@ -52,38 +52,4 @@ export const orderHandler = async (
       message: "Order created successfully",
       data: result,
     });
-  } catch (error: any) {
-    // Handle specific error types
-    if (
-      error.name === "DispositiveMissingError" ||
-      error.message.includes("No available dispositive")
-    ) {
-      return reply.code(404).send({
-        message: "No available dispositive found for this product",
-        error: error.message,
-      });
-    } else if (
-      error.message.includes("User relation") ||
-      error.message.includes("Argument `User` is missing")
-    ) {
-      return reply.code(400).send({
-        message: "Invalid user information",
-        error: error.message,
-      });
-    } else if (error.message.includes("Failed to create transaction")) {
-      return reply.code(500).send({
-        message: "Transaction creation failed",
-        error: error.message,
-      });
-    }
-
-    // Log unexpected errors
-    console.error("Order handler error:", error);
-
-    // Generic error response
-    return reply.code(500).send({
-      message: "An error occurred while processing your order",
-      error: error.message,
-    });
-  }
 };

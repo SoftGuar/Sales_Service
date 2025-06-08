@@ -1,121 +1,78 @@
+// src/services/transactionService.ts
 import * as transactionModel from '../models/transactionModel';
+import {
+  TransactionCreationError,
+  TransactionsRetrievalError,
+  TransactionFetchError,
+  TransactionUpdateError,
+  TransactionDeletionError,
+  ProductTransactionCreationError,
+  SalesRetrievalError,
+  ProductTransactionConfirmationError
+} from '../errors/TransactionErrors';
 
 export const TransactionService = {
-  /**
-   * Creates a new transaction in the database.
-   * @param {transactionModel.CreateTransactionInput} data - The transaction data to create.
-   * @returns {Promise<Object>} A promise that resolves to the created transaction object.
-   * @throws {Error} If the transaction creation fails.
-   */
-  createTransaction: async (data: transactionModel.CreateTransactionInput) => {
-    try {
-      return transactionModel.transactionModel.createTransaction(data);
-    } catch (error: any) {
-      console.error('Error creating transaction:', error);
-      throw error;
-    }
+  async createTransaction(data: transactionModel.CreateTransactionInput) {
+    const trx = await transactionModel.transactionModel
+      .createTransaction(data)
+      .catch(err => { throw new TransactionCreationError({ data, originalMessage: err.message }); });
+    if (!trx) throw new TransactionCreationError({ data });
+    return trx;
   },
 
-  /**
-   * Retrieves all transactions from the database.
-   * @returns {Promise<Array<Object>>} A promise that resolves to an array of transaction objects.
-   * @throws {Error} If the database query fails.
-   */
-  getTransactions: async () => {
-    try {
-      return transactionModel.transactionModel.getTransactions();
-    } catch (error: any) {
-      console.error('Error getting transactions:', error);
-      throw error;
-    }
+  async getTransactions() {
+    const list = await transactionModel.transactionModel
+      .getTransactions()
+      .catch(() => { throw new TransactionsRetrievalError(); });
+    if (!list) throw new TransactionsRetrievalError();
+    return list;
   },
 
-  /**
-   * Retrieves a transaction by its ID.
-   * @param {number} id - The ID of the transaction to retrieve.
-   * @returns {Promise<Object>} A promise that resolves to the transaction object.
-   * @throws {Error} If the transaction is not found or the database query fails.
-   */
-  getTransactionById: async (id: number) => {
-    try {
-      return transactionModel.transactionModel.getTransactionById(id);
-    } catch (error: any) {
-      console.error('Error getting transaction by ID:', error);
-      throw error;
-    }
+  async getTransactionById(id: number) {
+    const trx = await transactionModel.transactionModel
+      .getTransactionById(id)
+      .catch(err => { throw new TransactionFetchError(id, err); });
+    if (!trx) throw new TransactionFetchError(id, new Error('Transaction not found'));
+    return trx;
   },
 
-  /**
-   * Updates an existing transaction in the database.
-   * @param {number} id - The ID of the transaction to update.
-   * @param {transactionModel.UpdateTransactionInput} data - The updated transaction data.
-   * @returns {Promise<Object>} A promise that resolves to the updated transaction object.
-   * @throws {Error} If the transaction update fails.
-   */
-  updateTransaction: async (id: number, data: transactionModel.UpdateTransactionInput) => {
-    try {
-      return transactionModel.transactionModel.updateTransaction(id, data);
-    } catch (error: any) {
-      console.error('Error updating transaction:', error);
-      throw error;
-    }
+  async updateTransaction(id: number, data: transactionModel.UpdateTransactionInput) {
+    const updated = await transactionModel.transactionModel
+      .updateTransaction(id, data)
+      .catch(err => { throw new TransactionUpdateError(id, { data, originalMessage: err.message }); });
+    if (!updated) throw new TransactionUpdateError(id, { data });
+    return updated;
   },
 
-  /**
-   * Deletes a transaction from the database.
-   * @param {number} id - The ID of the transaction to delete.
-   * @returns {Promise<Object>} A promise that resolves to the deleted transaction object.
-   * @throws {Error} If the transaction deletion fails.
-   */
-  deleteTransaction: async (id: number) => {
-    try {
-      return transactionModel.transactionModel.deleteTransaction(id);
-    } catch (error: any) {
-      console.error('Error deleting transaction:', error);
-      throw error;
-    }
+  async deleteTransaction(id: number) {
+    const deleted = await transactionModel.transactionModel
+      .deleteTransaction(id)
+      .catch(err => { throw new TransactionDeletionError(id, { originalMessage: err.message }); });
+    if (!deleted) throw new TransactionDeletionError(id);
+    return deleted;
   },
 
-  /**
-   * Creates a new product transaction in the database.
-   * @param {transactionModel.ProductTransactionInput} data - The product transaction data to create.
-   * @returns {Promise<Object>} A promise that resolves to the created product transaction object.
-   * @throws {Error} If the product transaction creation fails.
-   */
-  createProductTransaction: async (data: transactionModel.ProductTransactionInput) => {
-    try {
-      return transactionModel.transactionModel.createProductTransaction(data);
-    } catch (error: any) {
-      console.error('Error creating product transaction:', error);
-      throw error;
-    }
+  async createProductTransaction(data: transactionModel.ProductTransactionInput) {
+    const pt = await transactionModel.transactionModel
+      .createProductTransaction(data)
+      .catch(err => { throw new ProductTransactionCreationError({ data, originalMessage: err.message }); });
+    if (!pt) throw new ProductTransactionCreationError({ data });
+    return pt;
   },
-  /**
-   * Retrieves sales details from the database.
-   * @returns {Promise<Array<Object>>} A promise that resolves to an array of sales details.
-   * @throws {Error} If the database query fails.
-   */
-  getSales: async (): Promise<Array<{
-        transactionId: number;
-        userName: string;
-        commercialName: string;
-        date: Date;
-        dispositiveId: number;
-        Status: boolean;
-  }>> => {
-    try {
-      return transactionModel.transactionModel.getSales();
-    } catch (error: any) {
-      console.error('Error getting sales:', error);
-      throw error;
-    }
+
+  async getSales() {
+    const sales = await transactionModel.transactionModel
+      .getSales()
+      .catch(() => { throw new SalesRetrievalError(); });
+    if (!sales) throw new SalesRetrievalError();
+    return sales;
   },
-  confirmProductTransaction: async (transaction_id: number, dispositive_id:number) => {
-    try {
-      return transactionModel.transactionModel.confirmProductTransaction(transaction_id, dispositive_id);
-    } catch (error: any) {
-      console.error('Error updating product transaction:', error);
-      throw error;
-    }
+
+  async confirmProductTransaction(transaction_id: number, dispositive_id: number) {
+    const result = await transactionModel.transactionModel
+      .confirmProductTransaction(transaction_id, dispositive_id)
+      .catch(err => { throw new ProductTransactionConfirmationError(transaction_id, dispositive_id, { originalMessage: err.message }); });
+    if (!result) throw new ProductTransactionConfirmationError(transaction_id, dispositive_id);
+    return result;
   }
 };

@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import * as handler from '../handlers/dispositiveHandler';
+import { CommonErrorResponses } from './baseSchema';
 
 /**
  * Registers routes for dispositive-related operations.

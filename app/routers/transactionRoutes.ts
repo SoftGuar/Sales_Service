@@ -1,5 +1,6 @@
 import * as th from '../handlers/transactionHandler';
 import { FastifyInstance } from 'fastify';
+import { CommonErrorResponses } from './baseSchema';
 
 /**
  * Defines the routes for handling transaction-related operations.
@@ -47,6 +48,7 @@ const confirmProductTransactionSchema={
                     updated_at: { type: 'string', format: 'date-time' }
                 },
             },
+            ...CommonErrorResponses,
         },
     },
 }
@@ -69,12 +71,7 @@ const getSalesSchema = {
                     },
                 },
             },
-            500: {
-                type: "object",
-                properties: {
-                    message: { type: "string", description: "Error message in case of failure." },
-                },
-            },
+            ...CommonErrorResponses,
         },
     },
 };
@@ -107,6 +104,7 @@ const createTransactionSchema = {
                     },
                 },
             },
+            ...CommonErrorResponses,
         },
     },
 };
@@ -129,6 +127,7 @@ const getAllTransactionsSchema = {
                     },
                 },
             },
+            ...CommonErrorResponses,
         },
     },
 };
@@ -164,6 +163,7 @@ const updateTransactionSchema = {
                     date: { type: "string", format: "date-time" },
                 },
             },
+            ...CommonErrorResponses,
         },
     },
 };
@@ -190,6 +190,7 @@ const getTransactionByIdSchema = {
                     date: { type: "string", format: "date-time" },
                 },
             },
+            ...CommonErrorResponses,
         },
     },
 };
@@ -212,6 +213,7 @@ const deleteTransactionSchema = {
                     message: { type: "string" },
                 },
             },
+            ...CommonErrorResponses,
         },
     },
 };

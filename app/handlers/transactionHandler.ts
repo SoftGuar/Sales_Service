@@ -39,7 +39,6 @@ export const createTransaction = async (
     request: FastifyRequest<CreateTransactionRequest>,
     reply: FastifyReply,
 ) => {
-    try {
         const transaction = request.body;
         reply.log.info('Creating transaction:', transaction);
         const newTransaction = await TransactionService.createTransaction(transaction);
@@ -48,9 +47,6 @@ export const createTransaction = async (
         } else {
             reply.code(500).send({ message: 'Failed to create transaction' });
         }
-    } catch (error: any) {
-        reply.code(500).send({ message: 'An error occurred while creating transaction' });
-    }
 }
 
 /**
@@ -64,16 +60,12 @@ export const getTransactions = async (
     request: FastifyRequest,
     reply: FastifyReply,
 ) => {
-    try {
         const transactions = await TransactionService.getTransactions();
         if (transactions) {
             reply.send(transactions);
         } else {
             reply.code(500).send({ message: 'Failed to get transactions' });
         }
-    } catch (error: any) {
-        reply.code(500).send({ message: 'An error occurred while getting transactions' });
-    }
 }
 
 /**
@@ -87,17 +79,9 @@ export const getTransactionById = async (
     request: FastifyRequest<{ Params: { id: number } }>,
     reply: FastifyReply,
 ) => {
-    try {
         const transactionId = Number(request.params.id);
         const transaction = await TransactionService.getTransactionById(transactionId);
-        if (transaction) {
-            reply.send(transaction);
-        } else {
-            reply.code(500).send({ message: 'Failed to get transaction' });
-        }
-    } catch (error: any) {
-        reply.code(500).send({ message: 'An error occurred while getting transaction' });
-    }
+        reply.send(transaction);
 }
 
 /**
@@ -111,7 +95,6 @@ export const updateTransaction = async (
     request: FastifyRequest<UpdateTransactionRequest>,
     reply: FastifyReply,
 ) => {
-    try {
         const transactionId = Number(request.params.id);
         const transaction = request.body;
         reply.log.info('Updating transaction:', transaction);
@@ -121,9 +104,6 @@ export const updateTransaction = async (
         } else {
             reply.code(500).send({ message: 'Failed to update transaction' });
         }
-    } catch (error: any) {
-        reply.code(500).send({ message: 'An error occurred while updating transaction' });
-    }
 }
 
 /**
@@ -137,7 +117,6 @@ export const deleteTransaction = async (
     request: FastifyRequest<{ Params: { id: number } }>,
     reply: FastifyReply,
 ) => {
-    try {
         const transactionId = Number(request.params.id);
         const deletedTransaction = await TransactionService.deleteTransaction(transactionId);
         if (deletedTransaction) {
@@ -145,9 +124,6 @@ export const deleteTransaction = async (
         } else {
             reply.code(500).send({ message: 'Failed to delete transaction' });
         }
-    } catch (error: any) {
-        reply.code(500).send({ message: 'An error occurred while deleting transaction' });
-    }
 }
 
 /**
@@ -161,23 +137,18 @@ export const getSales = async (
     request: FastifyRequest,
     reply: FastifyReply,
 ) => {
-    try {
         const sales = await TransactionService.getSales();
         if (sales) {
             reply.code(200).send(sales);
         } else {
             reply.code(500).send({ message: 'Failed to get sales details' });
         }
-    } catch (error: any) {
-        reply.code(500).send({ message: 'An error occurred while getting sales details' });
-    }
 }
 
 export const confirmProductTransaction= async (
     request: FastifyRequest<ProductTransactionUpdateRequest>,
     reply: FastifyReply,
 )=>{
-    try {
         const transactionId = Number(request.params.transaction_id);
         const dispositiveId = Number(request.params.dispositive_id);
         const updatedTransaction = await TransactionService.confirmProductTransaction(transactionId,  dispositiveId);
@@ -186,7 +157,4 @@ export const confirmProductTransaction= async (
         } else {
             reply.code(500).send({ message: 'Failed to update product transaction' });
         }
-    } catch (error: any) {
-        reply.code(500).send({ message: 'An error occurred while updating product transaction' });
-    }
 }

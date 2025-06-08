@@ -1,5 +1,7 @@
 import {orderHandler} from '../handlers/orderHandler';
 import {FastifyInstance} from 'fastify';
+import { CommonErrorResponses } from './baseSchema';
+
 /**
  * Registers the order-related routes for the Fastify application.
  *
@@ -53,30 +55,7 @@ const schema = {
                     }
                 }
             },
-            400: {
-                description: 'Missing or invalid fields in the request',
-                type: 'object',
-                properties: {
-                    message: { type: 'string' },
-                    details: { type: 'string' }
-                }
-            },
-            404: {
-                description: 'No available dispositive found for the product',
-                type: 'object',
-                properties: {
-                    message: { type: 'string' },
-                    error: { type: 'string' }
-                }
-            },
-            500: {
-                description: 'An error occurred while processing the order',
-                type: 'object',
-                properties: {
-                    message: { type: 'string' },
-                    error: { type: 'string' }
-                }
-            }
+            ...CommonErrorResponses,
         }
     }
 };

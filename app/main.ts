@@ -5,6 +5,8 @@ import registerMiddlewares from './middlewares/index';
 import registerRoutes from './routers/index';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
+import { BaseError } from './errors/BaseError';
+import appLogger from './utils/logger/logger';
 
 // Load environment variables
 dotenv.config();
@@ -40,6 +42,25 @@ async function startServer() {
 
   // 1. Register middlewares
   registerMiddlewares(fastify);
+
+  // Global error handler
+  fastify.setErrorHandler((error, request, reply) => {
+    if (error instanceof BaseError) {
+      appLogger.warn(error.toJSON(), 'Caught custom error');
+      reply.status(error.statusCode).send(error.toJSON());
+    } else {
+      appLogger.error(error, 'Caught unhandled error');
+      reply.status(500).send({
+        success: false,
+        error: {
+          message: 'Internal Server Error',
+          code: 'INTERNAL_SERVER_ERROR',
+          timestamp: new Date().toISOString(),
+          details: {},
+        },
+      });
+    }
+  });
 
   fastify.register(swagger, {
     swagger: {
