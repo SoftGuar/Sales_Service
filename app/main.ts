@@ -7,6 +7,7 @@ import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { BaseError } from './errors/BaseError';
 import appLogger from './utils/logger/logger';
+import { writeReport } from './utils/executive_report';
 
 // Load environment variables
 dotenv.config();
@@ -91,6 +92,8 @@ async function startServer() {
   try {
     await fastify.listen({ port, host });
     fastify.log.info(`Server started on port ${port}`);
+    setInterval(writeReport, 2 * 60 * 60 * 1000);
+
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
