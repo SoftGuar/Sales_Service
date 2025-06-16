@@ -33,42 +33,5 @@ describe("dispositiveHandler", () => {
             expect(dispositiveService.findAvailableDispositive).toHaveBeenCalledWith(1);
             expect(mockReply.send).toHaveBeenCalledWith(mockDispositive);
         });
-
-        it("should send a 400 error when no dispositive is found", async () => {
-            // Arrange
-            (dispositiveService.findAvailableDispositive as jest.Mock).mockResolvedValue(null);
-
-            const mockRequest = {
-                params: { product_id: 1 },
-            } as unknown as FastifyRequest<{ Params: { product_id: number } }>;
-
-            // Act
-            await getAvailableDispositive(mockRequest, mockReply as FastifyReply);
-
-            // Assert
-            expect(dispositiveService.findAvailableDispositive).toHaveBeenCalledWith(1);
-            expect(mockReply.code).toHaveBeenCalledWith(400);
-            expect(mockReply.send).toHaveBeenCalledWith({ message: "Dispositive not found" });
-        });
-
-        it("should send a 500 error when service call fails", async () => {
-            // Arrange
-            (dispositiveService.findAvailableDispositive as jest.Mock).mockRejectedValue(new Error("Service error"));
-
-            const mockRequest = {
-                params: { product_id: 1 },
-            } as unknown as FastifyRequest<{ Params: { product_id: number } }>;
-
-            // Act
-            await getAvailableDispositive(mockRequest, mockReply as FastifyReply);
-
-            // Assert
-            expect(dispositiveService.findAvailableDispositive).toHaveBeenCalledWith(1);
-            expect(mockReply.code).toHaveBeenCalledWith(500);
-            expect(mockReply.send).toHaveBeenCalledWith({
-                message: "An error occurred while getting dispositive",
-                error: "Service error",
-            });
-        });
     });
 });

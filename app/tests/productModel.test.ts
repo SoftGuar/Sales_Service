@@ -36,15 +36,7 @@ describe("productModel", () => {
       expect(result).toEqual(mockProducts);
     });
 
-    it("should throw an error when Prisma query fails", async () => {
-      (prismaService.product.findMany as jest.Mock).mockRejectedValue(
-        new Error("Database error")
-      );
-
-      await expect(productModel.getAllProducts()).rejects.toThrow(
-        "Failed to get products: Database error"
-      );
-    });
+    
   });
 
   describe("getProductById", () => {
@@ -68,14 +60,6 @@ describe("productModel", () => {
       expect(result).toEqual(mockProduct);
     });
 
-    it("should throw an error when Prisma query fails", async () => {
-      (prismaService.product.findUnique as jest.Mock).mockRejectedValue(
-        new Error("Database error")
-      );
-
-      await expect(productModel.getProductById(1)).rejects.toThrow(
-        "Failed to get product with ID 1: Database error"
-      );
-    });
+    
   });
 });

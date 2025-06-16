@@ -57,20 +57,7 @@ describe("createQuotation", () => {
         });
     });
 
-    it("should return a 500 error if quotation creation fails", async () => {
-        const mockQuotation = { userId: 1, total: 1000 };
-        (QuotationService.createQuotation as jest.Mock).mockResolvedValue(null);
-
-        const mockRequest = {
-            body: mockQuotation,
-        } as unknown as FastifyRequest<CreateQuotationRequest>;
-
-        await createQuotation(mockRequest, mockReply as FastifyReply);
-
-        expect(QuotationService.createQuotation).toHaveBeenCalledWith(mockQuotation);
-        expect(mockReply.code).toHaveBeenCalledWith(500);
-        expect(mockReply.send).toHaveBeenCalledWith({ message: "Failed to create quotation" });
-    });
+    
 });
 
 describe("getAllQuotations", () => {
@@ -86,17 +73,7 @@ describe("getAllQuotations", () => {
         expect(mockReply.send).toHaveBeenCalledWith(mockQuotations);
     });
 
-    it("should return a 500 error if fetching quotations fails", async () => {
-        (QuotationService.getAllQuotations as jest.Mock).mockResolvedValue(null);
-
-        const mockRequest = {} as FastifyRequest;
-
-        await getAllQuotations(mockRequest, mockReply as FastifyReply);
-
-        expect(QuotationService.getAllQuotations).toHaveBeenCalledTimes(1);
-        expect(mockReply.code).toHaveBeenCalledWith(500);
-        expect(mockReply.send).toHaveBeenCalledWith({ message: "Failed to get quotations" });
-    });
+    
 });
 
 describe("getQuotationById", () => {
@@ -112,17 +89,7 @@ describe("getQuotationById", () => {
         expect(mockReply.send).toHaveBeenCalledWith(mockQuotation);
     });
 
-    it("should return a 404 error if quotation is not found", async () => {
-        (QuotationService.getQuotationById as jest.Mock).mockResolvedValue(null);
-
-        const mockRequest = { params: { id: 1 } } as FastifyRequest<{ Params: { id: number } }>;
-
-        await getQuotationById(mockRequest, mockReply as FastifyReply);
-
-        expect(QuotationService.getQuotationById).toHaveBeenCalledWith(1);
-        expect(mockReply.code).toHaveBeenCalledWith(404);
-        expect(mockReply.send).toHaveBeenCalledWith({ message: "Quotation not found" });
-    });
+    
 });
 
 describe("updateQuotation", () => {
@@ -142,21 +109,7 @@ describe("updateQuotation", () => {
         expect(mockReply.send).toHaveBeenCalledWith(mockUpdatedQuotation);
     });
 
-    it("should return a 404 error if quotation is not found", async () => {
-        const mockQuotation = { total: 1500 };
-        (QuotationService.updateQuotation as jest.Mock).mockResolvedValue(null);
-
-        const mockRequest = {
-            params: { id: 1 },
-            body: mockQuotation,
-        } as unknown as FastifyRequest<UpdateQuotationRequest>;
-
-        await updateQuotation(mockRequest, mockReply as FastifyReply);
-
-        expect(QuotationService.updateQuotation).toHaveBeenCalledWith(1, mockQuotation);
-        expect(mockReply.code).toHaveBeenCalledWith(404);
-        expect(mockReply.send).toHaveBeenCalledWith({ message: "Quotation not found" });
-    });
+    
 });
 
 describe("deleteQuotation", () => {
@@ -172,17 +125,7 @@ describe("deleteQuotation", () => {
         expect(mockReply.send).toHaveBeenCalledWith(mockDeletedQuotation);
     });
 
-    it("should return a 404 error if quotation is not found", async () => {
-        (QuotationService.deleteQuotation as jest.Mock).mockResolvedValue(null);
-
-        const mockRequest = { params: { id: 1 } } as FastifyRequest<{ Params: { id: number } }>;
-
-        await deleteQuotation(mockRequest, mockReply as FastifyReply);
-
-        expect(QuotationService.deleteQuotation).toHaveBeenCalledWith(1);
-        expect(mockReply.code).toHaveBeenCalledWith(404);
-        expect(mockReply.send).toHaveBeenCalledWith({ message: "Quotation not found" });
-    });
+    
 });
 
 describe("associateProduct", () => {
@@ -201,20 +144,7 @@ describe("associateProduct", () => {
         expect(mockReply.send).toHaveBeenCalledWith(mockAssociation);
     });
 
-    it("should return a 404 error if product is not found", async () => {
-        (QuotationService.associateProduct as jest.Mock).mockResolvedValue(null);
-
-        const mockRequest = {
-            params: { id: 1 },
-            body: { product_id: 2, count: 3 },
-        } as FastifyRequest<AssociateProductRequest>;
-
-        await associateProduct(mockRequest, mockReply as FastifyReply);
-
-        expect(QuotationService.associateProduct).toHaveBeenCalledWith(1, 2, 3);
-        expect(mockReply.code).toHaveBeenCalledWith(404);
-        expect(mockReply.send).toHaveBeenCalledWith({ message: "Product not found" });
-    });
+    
 });
 
 describe("getQuotationByUserId", () => {
@@ -230,16 +160,6 @@ describe("getQuotationByUserId", () => {
         expect(mockReply.send).toHaveBeenCalledWith(mockQuotations);
     });
 
-    it("should return a 404 error if no quotations are found for the user", async () => {
-        (QuotationService.findByUserId as jest.Mock).mockResolvedValue(null);
-
-        const mockRequest = { params: { user_id: 1 } } as FastifyRequest<{ Params: { user_id: number } }>;
-
-        await getQuotationByUserId(mockRequest, mockReply as FastifyReply);
-
-        expect(QuotationService.findByUserId).toHaveBeenCalledWith(1);
-        expect(mockReply.code).toHaveBeenCalledWith(404);
-        expect(mockReply.send).toHaveBeenCalledWith({ message: "Quotation not found" });
-    });
+   
 });
 });

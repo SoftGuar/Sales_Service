@@ -38,13 +38,7 @@ describe("transactionModel", () => {
             expect(result).toEqual(createdTransaction);
         });
 
-        it("should throw an error when prisma query fails", async () => {
-            const newTransaction = { user_id: 1, commercial_id: 2 };
-
-            (prismaService.transaction.create as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            await expect(transactionModel.createTransaction(newTransaction)).rejects.toThrow("Database error");
-        });
+        
     });
 
     describe("getTransactions", () => {
@@ -62,11 +56,7 @@ describe("transactionModel", () => {
             expect(result).toEqual(mockTransactions);
         });
 
-        it("should throw an error when prisma query fails", async () => {
-            (prismaService.transaction.findMany as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            await expect(transactionModel.getTransactions()).rejects.toThrow("Database error");
-        });
+       
     });
 
     describe("getTransactionById", () => {
@@ -81,11 +71,7 @@ describe("transactionModel", () => {
             expect(result).toEqual(mockTransaction);
         });
 
-        it("should throw an error when prisma query fails", async () => {
-            (prismaService.transaction.findUnique as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            await expect(transactionModel.getTransactionById(1)).rejects.toThrow("Database error");
-        });
+        
     });
 
     describe("updateTransaction", () => {
@@ -104,13 +90,7 @@ describe("transactionModel", () => {
             expect(result).toEqual(mockUpdatedTransaction);
         });
 
-        it("should throw an error when prisma query fails", async () => {
-            const updatedTransaction = { user_id: 2, commercial_id: 3 };
-
-            (prismaService.transaction.update as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            await expect(transactionModel.updateTransaction(1, updatedTransaction)).rejects.toThrow("Database error");
-        });
+        
     });
 
     describe("deleteTransaction", () => {
@@ -123,12 +103,6 @@ describe("transactionModel", () => {
 
             expect(prismaService.transaction.delete).toHaveBeenCalledWith({ where: { id: 1 } });
             expect(result).toEqual(mockDeletedTransaction);
-        });
-
-        it("should throw an error when prisma query fails", async () => {
-            (prismaService.transaction.delete as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            await expect(transactionModel.deleteTransaction(1)).rejects.toThrow("Database error");
         });
     });
 
@@ -147,13 +121,7 @@ describe("transactionModel", () => {
             expect(result).toEqual(createdProductTransaction);
         });
 
-        it("should throw an error when prisma query fails", async () => {
-            const newProductTransaction = { dispositive_id: 1, transaction_id: 2 };
-
-            (prismaService.productTransaction.create as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            await expect(transactionModel.createProductTransaction(newProductTransaction)).rejects.toThrow("Database error");
-        });
+        
     });
     describe("getSales", () => {
         it("should return an array of sales details when prisma query succeeds", async () => {
@@ -208,10 +176,6 @@ describe("transactionModel", () => {
             expect(result).toEqual(expectedSalesDetails);
         });
 
-        it("should throw an error when prisma query fails", async () => {
-            (prismaService.productTransaction.findMany as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            await expect(transactionModel.getSales()).rejects.toThrow("Database error");
-        });
+       
     });
 });

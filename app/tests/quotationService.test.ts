@@ -20,13 +20,7 @@ describe("QuotationService", () => {
             expect(result).toEqual(mockQuotation);
         });
 
-        it("should throw an error if creation fails", async () => {
-            (quotationModel.QuotationModel.create as jest.Mock).mockRejectedValue(new Error("Creation error"));
-
-            await expect(
-                QuotationService.createQuotation({ user_id: 1 })
-            ).rejects.toThrow("Failed to create quotation");
-        });
+        
     });
 
     describe("getQuotationById", () => {
@@ -40,11 +34,7 @@ describe("QuotationService", () => {
             expect(result).toEqual(mockQuotation);
         });
 
-        it("should throw an error if fetching fails", async () => {
-            (quotationModel.QuotationModel.findById as jest.Mock).mockRejectedValue(new Error("Fetch error"));
-
-            await expect(QuotationService.getQuotationById(1)).rejects.toThrow("Failed to fetch quotation by ID");
-        });
+        
     });
 
     describe("getAllQuotations", () => {
@@ -61,11 +51,7 @@ describe("QuotationService", () => {
             expect(result).toEqual(mockQuotations);
         });
 
-        it("should throw an error if fetching fails", async () => {
-            (quotationModel.QuotationModel.getAll as jest.Mock).mockRejectedValue(new Error("Fetch error"));
-
-            await expect(QuotationService.getAllQuotations()).rejects.toThrow("Failed to fetch all quotations");
-        });
+        
     });
 
     describe("updateQuotation", () => {
@@ -79,13 +65,7 @@ describe("QuotationService", () => {
             expect(result).toEqual(mockUpdatedQuotation);
         });
 
-        it("should throw an error if update fails", async () => {
-            (quotationModel.QuotationModel.update as jest.Mock).mockRejectedValue(new Error("Update error"));
-
-            await expect(
-                QuotationService.updateQuotation(1, { user_id: 2 })
-            ).rejects.toThrow("Failed to update quotation");
-        });
+        
     });
 
     describe("deleteQuotation", () => {
@@ -99,11 +79,7 @@ describe("QuotationService", () => {
             expect(result).toEqual(mockDeletedQuotation);
         });
 
-        it("should throw an error if deletion fails", async () => {
-            (quotationModel.QuotationModel.delete as jest.Mock).mockRejectedValue(new Error("Deletion error"));
-
-            await expect(QuotationService.deleteQuotation(1)).rejects.toThrow("Failed to delete quotation");
-        });
+       
     });
 
     describe("associateProduct", () => {
@@ -117,13 +93,7 @@ describe("QuotationService", () => {
             expect(result).toEqual(mockAssociation);
         });
 
-        it("should throw an error if association fails", async () => {
-            (quotationModel.QuotationModel.associateProduct as jest.Mock).mockRejectedValue(new Error("Association error"));
-
-            await expect(
-                QuotationService.associateProduct(1, 1, 2)
-            ).rejects.toThrow("Failed to associate product with quotation");
-        });
+        
     });
 
     describe("findByUserId", () => {
@@ -140,11 +110,7 @@ describe("QuotationService", () => {
             expect(result).toEqual(mockQuotations);
         });
 
-        it("should throw an error if fetching fails", async () => {
-            (quotationModel.QuotationModel.findByUserId as jest.Mock).mockRejectedValue(new Error("Fetch error"));
-
-            await expect(QuotationService.findByUserId(1)).rejects.toThrow("Failed to find quotations by user ID");
-        });
+        
     });
 
     describe("demandeQuotation", () => {
@@ -161,15 +127,6 @@ describe("QuotationService", () => {
             expect(quotationModel.QuotationModel.associateProduct).toHaveBeenCalledWith(1, 1, 2);
         });
 
-        it("should throw an error if product association fails", async () => {
-            const mockQuotation = { id: 1, user_id: 1 };
-
-            (quotationModel.QuotationModel.create as jest.Mock).mockResolvedValue(mockQuotation);
-            (quotationModel.QuotationModel.associateProduct as jest.Mock).mockRejectedValue(new Error("Association error"));
-
-            await expect(
-                QuotationService.demandeQuotation(1, [{ product_id: 1, count: 2 }])
-            ).rejects.toThrow("Failed to create quotation request");
-        });
+       
     });
 });

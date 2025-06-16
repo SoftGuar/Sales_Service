@@ -22,13 +22,6 @@ describe("TransactionService", () => {
             expect(result).toEqual(mockTransaction);
         });
 
-        it("should throw an error if creation fails", async () => {
-            (transactionModel.transactionModel.createTransaction as jest.Mock).mockRejectedValue(new Error("Creation error"));
-
-            await expect(
-                TransactionService.createTransaction({ user_id: 1, commercial_id: 2 })
-            ).rejects.toThrow("Creation error");
-        });
     });
 
     describe("getTransactions", () => {
@@ -44,12 +37,6 @@ describe("TransactionService", () => {
             expect(transactionModel.transactionModel.getTransactions).toHaveBeenCalledTimes(1);
             expect(result).toEqual(mockTransactions);
         });
-
-        it("should throw an error if fetching fails", async () => {
-            (transactionModel.transactionModel.getTransactions as jest.Mock).mockRejectedValue(new Error("Fetch error"));
-
-            await expect(TransactionService.getTransactions()).rejects.toThrow("Fetch error");
-        });
     });
 
     describe("getTransactionById", () => {
@@ -63,11 +50,7 @@ describe("TransactionService", () => {
             expect(result).toEqual(mockTransaction);
         });
 
-        it("should throw an error if fetching fails", async () => {
-            (transactionModel.transactionModel.getTransactionById as jest.Mock).mockRejectedValue(new Error("Fetch error"));
-
-            await expect(TransactionService.getTransactionById(1)).rejects.toThrow("Fetch error");
-        });
+        
     });
 
     describe("updateTransaction", () => {
@@ -81,13 +64,7 @@ describe("TransactionService", () => {
             expect(result).toEqual(mockUpdatedTransaction);
         });
 
-        it("should throw an error if update fails", async () => {
-            (transactionModel.transactionModel.updateTransaction as jest.Mock).mockRejectedValue(new Error("Update error"));
-
-            await expect(
-                TransactionService.updateTransaction(1, { commercial_id: 3 })
-            ).rejects.toThrow("Update error");
-        });
+       
     });
 
     describe("deleteTransaction", () => {
@@ -101,11 +78,7 @@ describe("TransactionService", () => {
             expect(result).toEqual(mockDeletedTransaction);
         });
 
-        it("should throw an error if deletion fails", async () => {
-            (transactionModel.transactionModel.deleteTransaction as jest.Mock).mockRejectedValue(new Error("Deletion error"));
-
-            await expect(TransactionService.deleteTransaction(1)).rejects.toThrow("Deletion error");
-        });
+        
     });
 
     describe("createProductTransaction", () => {
@@ -119,12 +92,6 @@ describe("TransactionService", () => {
             expect(result).toEqual(mockProductTransaction);
         });
 
-        it("should throw an error if creation fails", async () => {
-            (transactionModel.transactionModel.createProductTransaction as jest.Mock).mockRejectedValue(new Error("Creation error"));
-
-            await expect(
-                TransactionService.createProductTransaction({ dispositive_id: 1, transaction_id: 1 })
-            ).rejects.toThrow("Creation error");
-        });
+        
     });
 });

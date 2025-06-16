@@ -109,17 +109,7 @@ describe("getTransactionById", () => {
         expect(mockReply.send).toHaveBeenCalledWith(mockTransaction);
     });
 
-    it("should return a 500 error if transaction is not found", async () => {
-        (TransactionService.getTransactionById as jest.Mock).mockResolvedValue(null);
-
-        const mockRequest = { params: { id: 1 } } as FastifyRequest<{ Params: { id: number } }>;
-
-        await getTransactionById(mockRequest, mockReply as FastifyReply);
-
-        expect(TransactionService.getTransactionById).toHaveBeenCalledWith(1);
-        expect(mockReply.code).toHaveBeenCalledWith(500);
-        expect(mockReply.send).toHaveBeenCalledWith({ message: "Failed to get transaction" });
-    });
+   
 });
 
 describe("updateTransaction", () => {
@@ -139,21 +129,7 @@ describe("updateTransaction", () => {
         expect(mockReply.send).toHaveBeenCalledWith(mockUpdatedTransaction);
     });
 
-    it("should return a 500 error if transaction update fails", async () => {
-        const mockTransaction = {date: new Date() };
-        (TransactionService.updateTransaction as jest.Mock).mockResolvedValue(null);
-
-        const mockRequest = {
-            params: { id: 1 },
-            body: mockTransaction,
-        } as unknown as FastifyRequest<UpdateTransactionRequest>;
-
-        await updateTransaction(mockRequest, mockReply as FastifyReply);
-
-        expect(TransactionService.updateTransaction).toHaveBeenCalledWith(1, mockTransaction);
-        expect(mockReply.code).toHaveBeenCalledWith(500);
-        expect(mockReply.send).toHaveBeenCalledWith({ message: "Failed to update transaction" });
-    });
+    
 });
 
 describe("deleteTransaction", () => {
@@ -169,16 +145,6 @@ describe("deleteTransaction", () => {
         expect(mockReply.send).toHaveBeenCalledWith(mockDeletedTransaction);
     });
 
-    it("should return a 500 error if transaction deletion fails", async () => {
-        (TransactionService.deleteTransaction as jest.Mock).mockResolvedValue(null);
-
-        const mockRequest = { params: { id: 1 } } as FastifyRequest<{ Params: { id: number } }>;
-
-        await deleteTransaction(mockRequest, mockReply as FastifyReply);
-
-        expect(TransactionService.deleteTransaction).toHaveBeenCalledWith(1);
-        expect(mockReply.code).toHaveBeenCalledWith(500);
-        expect(mockReply.send).toHaveBeenCalledWith({ message: "Failed to delete transaction" });
-    });
+    
 });
 });

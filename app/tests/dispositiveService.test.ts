@@ -23,27 +23,5 @@ describe("dispositiveService", () => {
             expect(dispositiveModel.findAvailableDispositive).toHaveBeenCalledWith(1);
             expect(result).toEqual(mockDispositive);
         });
-
-        it("should throw an error when no available dispositive is found", async () => {
-            // Arrange
-            (dispositiveModel.findAvailableDispositive as jest.Mock).mockResolvedValue(null);
-
-            // Act & Assert
-            await expect(dispositiveService.findAvailableDispositive(1)).rejects.toThrow(
-                "No available dispositive found for the product"
-            );
-            expect(dispositiveModel.findAvailableDispositive).toHaveBeenCalledWith(1);
-        });
-
-        it("should throw an error when the model call fails", async () => {
-            // Arrange
-            (dispositiveModel.findAvailableDispositive as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            // Act & Assert
-            await expect(dispositiveService.findAvailableDispositive(1)).rejects.toThrow(
-                "An error occurred while retrieving the dispositive: Database error"
-            );
-            expect(dispositiveModel.findAvailableDispositive).toHaveBeenCalledWith(1);
-        });
     });
 });

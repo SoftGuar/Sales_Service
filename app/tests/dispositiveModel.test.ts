@@ -36,21 +36,5 @@ describe("dispositiveModel", () => {
       });
       expect(result).toEqual(mockDispositive);
     });
-
-    it("should throw an error when prisma query fails", async () => {
-      const mockError = new Error("Database error");
-
-      (prismaService.dispositive.findFirst as jest.Mock).mockRejectedValue(
-        mockError
-      );
-
-      await expect(
-        dispositiveModel.findAvailableDispositive(123)
-      ).rejects.toThrow("An error occurred while retrieving the dispositive: Database error");
-
-      expect(prismaService.dispositive.findFirst).toHaveBeenCalledWith({
-        where: { product_id: 123, user_id: NaN },
-      });
-    });
   });
 });

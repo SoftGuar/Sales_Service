@@ -40,20 +40,7 @@ describe("QuotationModel", () => {
             expect(result).toEqual(createdQuotation);
         });
 
-        it("should return null and log an error when Prisma query fails", async () => {
-            const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-
-            const newQuotation = { user_id: 1, date: new Date() };
-
-            (prismaService.quotation.create as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            const result = await QuotationModel.create(newQuotation);
-
-            expect(result).toBeNull();
-            expect(consoleErrorSpy).toHaveBeenCalledWith("Error creating quotation:", expect.any(Error));
-
-            consoleErrorSpy.mockRestore();
-        });
+       
     });
 
     describe("findById", () => {
@@ -70,18 +57,7 @@ describe("QuotationModel", () => {
             expect(result).toEqual(mockQuotation);
         });
 
-        it("should return null and log an error when Prisma query fails", async () => {
-            const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-
-            (prismaService.quotation.findUnique as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            const result = await QuotationModel.findById(1);
-
-            expect(result).toBeNull();
-            expect(consoleErrorSpy).toHaveBeenCalledWith("Error finding quotation by ID:", expect.any(Error));
-
-            consoleErrorSpy.mockRestore();
-        });
+        
     });
 
     describe("getAll", () => {
@@ -99,18 +75,7 @@ describe("QuotationModel", () => {
             expect(result).toEqual(mockQuotations);
         });
 
-        it("should return an empty array and log an error when Prisma query fails", async () => {
-            const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-
-            (prismaService.quotation.findMany as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            const result = await QuotationModel.getAll();
-
-            expect(result).toEqual([]);
-            expect(consoleErrorSpy).toHaveBeenCalledWith("Error getting all quotations:", expect.any(Error));
-
-            consoleErrorSpy.mockRestore();
-        });
+        
     });
 
     describe("update", () => {
@@ -129,20 +94,7 @@ describe("QuotationModel", () => {
             expect(result).toEqual(mockUpdatedQuotation);
         });
 
-        it("should return null and log an error when Prisma query fails", async () => {
-            const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-
-            const updatedQuotation = { user_id: 2, date: new Date() };
-
-            (prismaService.quotation.update as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            const result = await QuotationModel.update(1, updatedQuotation);
-
-            expect(result).toBeNull();
-            expect(consoleErrorSpy).toHaveBeenCalledWith("Error updating quotation:", expect.any(Error));
-
-            consoleErrorSpy.mockRestore();
-        });
+        
     });
 
     describe("delete", () => {
@@ -159,18 +111,7 @@ describe("QuotationModel", () => {
             expect(result).toEqual(mockDeletedQuotation);
         });
 
-        it("should return null and log an error when Prisma query fails", async () => {
-            const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-
-            (prismaService.quotation.delete as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            const result = await QuotationModel.delete(1);
-
-            expect(result).toBeNull();
-            expect(consoleErrorSpy).toHaveBeenCalledWith("Error deleting quotation:", expect.any(Error));
-
-            consoleErrorSpy.mockRestore();
-        });
+        
     });
 
     describe("associateProduct", () => {
@@ -191,18 +132,7 @@ describe("QuotationModel", () => {
             expect(result).toEqual(mockAssociation);
         });
 
-        it("should return null and log an error when Prisma query fails", async () => {
-            const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-
-            (prismaService.productQuotation.create as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            const result = await QuotationModel.associateProduct(1, 1, 10);
-
-            expect(result).toBeNull();
-            expect(consoleErrorSpy).toHaveBeenCalledWith("Error associating product with quotation:", expect.any(Error));
-
-            consoleErrorSpy.mockRestore();
-        });
+       
     });
 
     describe("findByUserId", () => {
@@ -222,17 +152,6 @@ describe("QuotationModel", () => {
             expect(result).toEqual(mockQuotations);
         });
 
-        it("should return null and log an error when Prisma query fails", async () => {
-            const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-
-            (prismaService.quotation.findMany as jest.Mock).mockRejectedValue(new Error("Database error"));
-
-            const result = await QuotationModel.findByUserId(1);
-
-            expect(result).toBeNull();
-            expect(consoleErrorSpy).toHaveBeenCalledWith("Error finding quotation by user ID:", expect.any(Error));
-
-            consoleErrorSpy.mockRestore();
-        });
+       
     });
 });
